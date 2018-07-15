@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,7 +62,7 @@ public class CommentController {
 			value = "/{commentId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Comment> getComment(@PathParam("commentId") Long commentId) {
+	public ResponseEntity<Comment> getComment(@PathVariable("commentId") Long commentId) {
 		Comment comment = this.commentQuery.getCommentById(commentId);
 		return new ResponseEntity<>(comment, HttpStatus.OK);
 	}
@@ -72,7 +73,7 @@ public class CommentController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Comment> updateComment(@RequestBody CommentDTO comment, @PathParam("commentId") Long commentId) {
+	public ResponseEntity<Comment> updateComment(@RequestBody CommentDTO comment, @PathVariable("commentId") Long commentId) {
 		if (comment.getId() == commentId) {
 			Comment updatedComment = this.commentCommand.updateComment(comment);
 			return new ResponseEntity<>(updatedComment, HttpStatus.OK);
@@ -84,7 +85,7 @@ public class CommentController {
 	@DeleteMapping(
 			value = "/{commentId}"
 	)
-	public ResponseEntity<HttpStatus> deleteComment(@PathParam("commentId") Long commentId) {
+	public ResponseEntity<HttpStatus> deleteComment(@PathVariable("commentId") Long commentId) {
 		this.commentCommand.deleteComment(commentId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

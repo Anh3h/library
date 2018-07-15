@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,7 +62,7 @@ public class BookController {
 			value = "{userId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Book> getBook(@PathParam("bookId") Long bookId) {
+	public ResponseEntity<Book> getBook(@PathVariable("bookId") Long bookId) {
 		Book book = this.bookQuery.getBookById(bookId);
 		return new ResponseEntity<>(book, HttpStatus.OK);
 	}
@@ -72,7 +73,7 @@ public class BookController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Book> updateBook(@RequestBody BookDTO book, @PathParam("bookId") Long bookId) {
+	public ResponseEntity<Book> updateBook(@RequestBody BookDTO book, @PathVariable("bookId") Long bookId) {
 		if (book.getId() == bookId) {
 			Book updatedBook = this.bookCommand.updateBook(book);
 			return new ResponseEntity<>(updatedBook, HttpStatus.OK);
@@ -84,7 +85,7 @@ public class BookController {
 	@DeleteMapping(
 			value = "/{bookId}"
 	)
-	public ResponseEntity<HttpStatus> deleteBook(@PathParam("bookId") Long bookId) {
+	public ResponseEntity<HttpStatus> deleteBook(@PathVariable("bookId") Long bookId) {
 		this.bookCommand.deleteBook(bookId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

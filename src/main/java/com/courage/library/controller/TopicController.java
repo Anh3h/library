@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,7 +63,7 @@ public class TopicController {
 			value = "/{topicId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Topic> getTopic(@PathParam("topicId") Long topicId) {
+	public ResponseEntity<Topic> getTopic(@PathVariable("topicId") Long topicId) {
 		Topic topic = this.topicQuery.getTopicById(topicId);
 		return new ResponseEntity<>(topic, HttpStatus.OK);
 	}
@@ -73,7 +74,7 @@ public class TopicController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Topic> updateTopic(@RequestBody Topic topic, @PathParam("topicId") Long topicId) {
+	public ResponseEntity<Topic> updateTopic(@RequestBody Topic topic, @PathVariable("topicId") Long topicId) {
 		if (topic.getId() == topicId) {
 			Topic updatedTopic = this.topicCommand.updateTopic(topic);
 			return new ResponseEntity<>(updatedTopic, HttpStatus.OK);
@@ -85,7 +86,7 @@ public class TopicController {
 	@DeleteMapping(
 			value = "/{topicId}"
 	)
-	public ResponseEntity<HttpStatus> deleteTopic(@PathParam("topicId") Long topicId) {
+	public ResponseEntity<HttpStatus> deleteTopic(@PathVariable("topicId") Long topicId) {
 		this.topicCommand.deleteTopic(topicId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

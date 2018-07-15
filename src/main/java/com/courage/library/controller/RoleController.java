@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,7 +57,7 @@ public class RoleController {
 			value = "/{roleId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Role> getRole(@PathParam("roleId") Long roleId) {
+	public ResponseEntity<Role> getRole(@PathVariable("roleId") Long roleId) {
 		Role role = this.roleQuery.getRoleById(roleId);
 		return new ResponseEntity<>(role, HttpStatus.OK);
 	}
@@ -67,7 +68,7 @@ public class RoleController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Role> updateRole(@RequestBody Role role, @PathParam("roleId") Long roleId) {
+	public ResponseEntity<Role> updateRole(@RequestBody Role role, @PathVariable("roleId") Long roleId) {
 		if (role.getId() == roleId) {
 			Role updateRole = this.roleCommand.updateRole(role);
 			return new ResponseEntity<>(updateRole, HttpStatus.OK);

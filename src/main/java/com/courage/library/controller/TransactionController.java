@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,7 +62,7 @@ public class TransactionController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Transaction> getTransaction(@PathParam("transId") Long transId) {
+	public ResponseEntity<Transaction> getTransaction(@PathVariable("transId") Long transId) {
 		Transaction transaction = this.transactionQuery.getTransactionById(transId);
 		return new ResponseEntity<>(transaction, HttpStatus.OK);
 	}
@@ -73,7 +74,7 @@ public class TransactionController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Transaction> updateTransaction(@RequestBody TransactionDTO transaction,
-			@PathParam("transId") Long transId) {
+			@PathVariable("transId") Long transId) {
 		if (transaction.getId() == transId) {
 			Transaction updatedTrans = this.transactionCommand.updateTransaction(transaction);
 			return new ResponseEntity<>(updatedTrans, HttpStatus.OK);

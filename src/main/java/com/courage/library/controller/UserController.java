@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,7 +62,7 @@ public class UserController {
 			value = "/userId",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<User> getUser(@PathParam("userId") Long userId) {
+	public ResponseEntity<User> getUser(@PathVariable("userId") Long userId) {
 		User user = this.userQuery.getUserById(userId);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
@@ -72,7 +73,7 @@ public class UserController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<User> updateUser(@RequestBody UserDTO user, @PathParam("userId") Long userId) {
+	public ResponseEntity<User> updateUser(@RequestBody UserDTO user, @PathVariable("userId") Long userId) {
 		if (user.getId() == userId) {
 			User updatedUser = this.userCommand.updateUser(user);
 			return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -84,7 +85,7 @@ public class UserController {
 	@DeleteMapping(
 			value = "/userId"
 	)
-	public ResponseEntity<HttpStatus> deleteUser(@PathParam("userId") Long userId) {
+	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") Long userId) {
 		this.userCommand.deleteUser(userId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
