@@ -36,7 +36,7 @@ public class BookCommandImplementation implements BookCommand {
 	}
 
 	@Override
-	public void deleteBook(Long bookId) {
+	public void deleteBook(String bookId) {
 		this.bookRepository.existsById(bookId);
 	}
 }

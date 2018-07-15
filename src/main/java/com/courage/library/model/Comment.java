@@ -12,8 +12,7 @@ import javax.validation.constraints.NotNull;
 public class Comment {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id;
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -35,11 +34,11 @@ public class Comment {
 		this.book = new Book();
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

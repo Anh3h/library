@@ -18,7 +18,7 @@ public class BookQueryImplementation implements BookQuery {
 	private BookRepository bookRepository;
 
 	@Override
-	public Book getBookById(Long bookId) {
+	public Book getBookById(String bookId) {
 		Book book = this.bookRepository.getOne(bookId);
 		if (book == null) {
 			throw NotFoundException.create("Not Found: Book does not exist");

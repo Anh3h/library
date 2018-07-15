@@ -5,6 +5,6 @@ import org.springframework.data.domain.Page;
 
 public interface TopicQuery {
 
-	Topic getTopicById(Long id);
+	Topic getTopicById(String id);
 	Page<Topic> getTopics(Integer pageNumber, Integer pageSize);
 }

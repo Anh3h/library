@@ -7,11 +7,11 @@ import com.courage.library.model.Status;
 
 public class TransactionDTO {
 
-	private Long id;
+	private String id;
 	@NotNull
-	private Long userId;
+	private String userId;
 	@NotNull
-	private Long bookId;
+	private String bookId;
 	@NotNull
 	private Date checkOut;
 	@NotNull
@@ -21,7 +21,7 @@ public class TransactionDTO {
 	@NotNull
 	private Status checkInStatus;
 
-	public TransactionDTO(Long id, @NotNull Long userId, @NotNull Long bookId,
+	public TransactionDTO(String id, @NotNull String userId, @NotNull String bookId,
 			@NotNull Date checkOut, @NotNull Date checkIn,
 			@NotNull Status checkOutStatus, @NotNull Status checkInStatus) {
 		this.id = id;
@@ -33,27 +33,27 @@ public class TransactionDTO {
 		this.checkInStatus = checkInStatus;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public Long getBookId() {
+	public String getBookId() {
 		return bookId;
 	}
 
-	public void setBookId(Long bookId) {
+	public void setBookId(String bookId) {
 		this.bookId = bookId;
 	}
 

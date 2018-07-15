@@ -5,6 +5,6 @@ import org.springframework.data.domain.Page;
 
 public interface UserQuery {
 
-	User getUserById(Long id);
+	User getUserById(String id);
 	Page<User> getUsers(Integer pageNumber, Integer pageSize);
 }

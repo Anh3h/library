@@ -4,15 +4,15 @@ import javax.validation.constraints.NotNull;
 
 public class CommentDTO {
 
-	private Long id;
+	private String id;
 	@NotNull
-	private Long userId;
+	private String userId;
 	@NotNull
-	private Long bookId;
+	private String bookId;
 	@NotNull
 	private String text;
 
-	public CommentDTO(Long id, @NotNull Long userId, @NotNull Long bookId,
+	public CommentDTO(String id, @NotNull String userId, @NotNull String bookId,
 			@NotNull String text) {
 		this.id = id;
 		this.userId = userId;
@@ -20,27 +20,27 @@ public class CommentDTO {
 		this.text = text;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public Long getBookId() {
+	public String getBookId() {
 		return bookId;
 	}
 
-	public void setBookId(Long bookId) {
+	public void setBookId(String bookId) {
 		this.bookId = bookId;
 	}
 

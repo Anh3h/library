@@ -17,8 +17,7 @@ import java.util.Set;
 public class Book {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id;
 	@NotNull
 	@Column(nullable = false)
 	private String title;
@@ -82,11 +81,11 @@ public class Book {
 		this.numOfBorrows = numOfBorrows;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

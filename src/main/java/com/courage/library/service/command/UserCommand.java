@@ -7,5 +7,5 @@ public interface UserCommand {
 
 	User createUser(UserDTO user);
 	User updateUser(UserDTO user);
-	void deleteUser(Long userId);
+	void deleteUser(String userId);
 }

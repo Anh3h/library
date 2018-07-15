@@ -7,7 +7,7 @@ import com.courage.library.model.Topic;
 
 public class BookDTO {
 
-	private Long id;
+	private String id;
 	@NotNull
 	private String title;
 	@NotNull
@@ -18,7 +18,7 @@ public class BookDTO {
 	private String publisher;
 	private Date publicationDate;
 	@NotNull
-	private Long topicId;
+	private String topicId;
 	private String shelf;
 	@NotNull
 	private Integer totalQty;
@@ -31,9 +31,9 @@ public class BookDTO {
 	@NotNull
 	private Integer numOfBorrows;
 
-	public BookDTO(Long id, @NotNull String title, @NotNull String isbn,
+	public BookDTO(String id, @NotNull String title, @NotNull String isbn,
 			@NotNull String author, String edition, String publisher, Date publicationDate,
-			@NotNull Long topicId, String shelf, @NotNull Integer totalQty,
+			@NotNull String topicId, String shelf, @NotNull Integer totalQty,
 			@NotNull Integer availableQty, @NotNull Integer upVotes,
 			@NotNull Integer downVotes, @NotNull Integer numOfBorrows) {
 		this.id = id;
@@ -52,11 +52,11 @@ public class BookDTO {
 		this.numOfBorrows = numOfBorrows;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -108,11 +108,11 @@ public class BookDTO {
 		this.publicationDate = publicationDate;
 	}
 
-	public Long getTopicId() {
+	public String getTopicId() {
 		return topicId;
 	}
 
-	public void setTopicId(Long topicId) {
+	public void setTopicId(String topicId) {
 		this.topicId = topicId;
 	}
 

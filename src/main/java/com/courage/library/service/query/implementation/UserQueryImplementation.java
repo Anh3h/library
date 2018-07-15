@@ -18,7 +18,7 @@ public class UserQueryImplementation implements UserQuery {
 	private UserRepository userRepository;
 
 	@Override
-	public User getUserById(Long id) {
+	public User getUserById(String id) {
 		User user = this.userRepository.getOne(id);
 		if (user == null) {
 			throw NotFoundException.create("Not Found: User does not exist");

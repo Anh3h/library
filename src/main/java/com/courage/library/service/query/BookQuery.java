@@ -5,6 +5,6 @@ import org.springframework.data.domain.Page;
 
 public interface BookQuery {
 
-	Book getBookById(Long bookId);
+	Book getBookById(String bookId);
 	Page<Book> getBooks(Integer pageNumber, Integer pageSize);
 }

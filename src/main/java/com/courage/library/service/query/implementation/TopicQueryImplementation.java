@@ -18,7 +18,7 @@ public class TopicQueryImplementation implements TopicQuery {
 	private TopicRepository topicRepository;
 
 	@Override
-	public Topic getTopicById(Long id) {
+	public Topic getTopicById(String id) {
 		Topic topic = this.topicRepository.getOne(id);
 		if (topic == null) {
 			throw NotFoundException.create("Not Found: Topic does not exist");

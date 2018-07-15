@@ -63,7 +63,7 @@ public class TopicController {
 			value = "/{topicId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Topic> getTopic(@PathVariable("topicId") Long topicId) {
+	public ResponseEntity<Topic> getTopic(@PathVariable("topicId") String topicId) {
 		Topic topic = this.topicQuery.getTopicById(topicId);
 		return new ResponseEntity<>(topic, HttpStatus.OK);
 	}
@@ -74,7 +74,7 @@ public class TopicController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Topic> updateTopic(@RequestBody Topic topic, @PathVariable("topicId") Long topicId) {
+	public ResponseEntity<Topic> updateTopic(@RequestBody Topic topic, @PathVariable("topicId") String topicId) {
 		if (topic.getId() == topicId) {
 			Topic updatedTopic = this.topicCommand.updateTopic(topic);
 			return new ResponseEntity<>(updatedTopic, HttpStatus.OK);
@@ -86,7 +86,7 @@ public class TopicController {
 	@DeleteMapping(
 			value = "/{topicId}"
 	)
-	public ResponseEntity<HttpStatus> deleteTopic(@PathVariable("topicId") Long topicId) {
+	public ResponseEntity<HttpStatus> deleteTopic(@PathVariable("topicId") String topicId) {
 		this.topicCommand.deleteTopic(topicId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

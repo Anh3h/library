@@ -33,7 +33,7 @@ public class TransactionCommandImplementation implements TransactionCommand {
 	}
 
 	@Override
-	public void deleteTransaction(Long transId) {
+	public void deleteTransaction(String transId) {
 		this.transactionRepository.deleteById(transId);
 	}
 }

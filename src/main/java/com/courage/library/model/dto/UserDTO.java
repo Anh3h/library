@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDTO {
 
-	private Long id;
+	private String id;
 	@NotNull
 	private String firstName;
 	@NotNull
@@ -27,12 +27,12 @@ public class UserDTO {
 	@NotNull
 	private String telephone;
 	@NotNull
-	private Long roleId;
+	private String roleId;
 	private Set<Book> favoriteBooks;
 
-	public UserDTO(Long id, @NotNull String firstName, @NotNull String lastName,
+	public UserDTO(String id, @NotNull String firstName, @NotNull String lastName,
 			@NotNull String username, @NotNull String email, @NotNull String password,
-			@NotNull Date dob, @NotNull String telephone, @NotNull Long roleId) {
+			@NotNull Date dob, @NotNull String telephone, @NotNull String roleId) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -45,11 +45,11 @@ public class UserDTO {
 		this.favoriteBooks = new HashSet<>();
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -109,11 +109,11 @@ public class UserDTO {
 		this.telephone = telephone;
 	}
 
-	public Long getRoleId() {
+	public String getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Long roleId) {
+	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
 

@@ -37,7 +37,7 @@ public class UserCommandImplementation implements UserCommand {
 	}
 
 	@Override
-	public void deleteUser(Long userId) {
+	public void deleteUser(String userId) {
 		this.userRepository.deleteById(userId);
 	}
 }

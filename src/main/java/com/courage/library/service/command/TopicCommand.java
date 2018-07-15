@@ -6,5 +6,5 @@ public interface TopicCommand {
 
 	Topic createTopic(Topic topic);
 	Topic updateTopic(Topic topic);
-	void deleteTopic(Long topicId);
+	void deleteTopic(String topicId);
 }

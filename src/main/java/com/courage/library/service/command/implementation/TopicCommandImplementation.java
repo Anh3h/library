@@ -19,6 +19,7 @@ public class TopicCommandImplementation implements TopicCommand {
 	@Override
 	public Topic createTopic(Topic topic) {
 		if (this.topicRepository.findByName(topic.getName()) == null) {
+			topic.setId(null);
 			return this.topicRepository.save(topic);
 		}
 		throw ConflictException.create("Conflict: Topic name already exist");
@@ -33,7 +34,7 @@ public class TopicCommandImplementation implements TopicCommand {
 	}
 
 	@Override
-	public void deleteTopic(Long topicId) {
+	public void deleteTopic(String topicId) {
 		this.topicRepository.deleteById(topicId);
 	}
 }

@@ -62,7 +62,7 @@ public class TransactionController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Transaction> getTransaction(@PathVariable("transId") Long transId) {
+	public ResponseEntity<Transaction> getTransaction(@PathVariable("transId") String transId) {
 		Transaction transaction = this.transactionQuery.getTransactionById(transId);
 		return new ResponseEntity<>(transaction, HttpStatus.OK);
 	}
@@ -74,7 +74,7 @@ public class TransactionController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Transaction> updateTransaction(@RequestBody TransactionDTO transaction,
-			@PathVariable("transId") Long transId) {
+			@PathVariable("transId") String transId) {
 		if (transaction.getId() == transId) {
 			Transaction updatedTrans = this.transactionCommand.updateTransaction(transaction);
 			return new ResponseEntity<>(updatedTrans, HttpStatus.OK);

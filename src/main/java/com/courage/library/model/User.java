@@ -22,8 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class User {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id;
 	@NotNull
 	@Column(nullable = false)
 	private String firstName;
@@ -73,11 +72,11 @@ public class User {
 		this.favoriteBooks = new HashSet<>();
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

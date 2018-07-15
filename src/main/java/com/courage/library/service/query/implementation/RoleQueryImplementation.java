@@ -18,7 +18,7 @@ public class RoleQueryImplementation implements RoleQuery {
 	private RoleRepository roleRepository;
 
 	@Override
-	public Role getRoleById(Long roleId) {
+	public Role getRoleById(String roleId) {
 		Role role = this.roleRepository.getOne(roleId);
 		if (role == null) {
 			throw NotFoundException.create("Not Found: Role does not exist");

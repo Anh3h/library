@@ -6,6 +6,6 @@ import com.courage.library.model.Role;
 
 public interface RoleQuery {
 
-	Role getRoleById(Long roleId);
+	Role getRoleById(String roleId);
 	List<Role> getRoles();
 }

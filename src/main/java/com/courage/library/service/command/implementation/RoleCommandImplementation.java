@@ -19,6 +19,7 @@ public class RoleCommandImplementation implements RoleCommand {
 	@Override
 	public Role createRole(Role role) {
 		if (this.roleRepository.findByName(role.getName()) == null) {
+			role.setId(null);
 			return this.roleRepository.save(role);
 		}
 		throw ConflictException.create("Conflict: Role name already exist");

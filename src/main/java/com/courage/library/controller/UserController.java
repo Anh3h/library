@@ -62,7 +62,7 @@ public class UserController {
 			value = "/userId",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<User> getUser(@PathVariable("userId") Long userId) {
+	public ResponseEntity<User> getUser(@PathVariable("userId") String userId) {
 		User user = this.userQuery.getUserById(userId);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
@@ -73,7 +73,7 @@ public class UserController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<User> updateUser(@RequestBody UserDTO user, @PathVariable("userId") Long userId) {
+	public ResponseEntity<User> updateUser(@RequestBody UserDTO user, @PathVariable("userId") String userId) {
 		if (user.getId() == userId) {
 			User updatedUser = this.userCommand.updateUser(user);
 			return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -85,7 +85,7 @@ public class UserController {
 	@DeleteMapping(
 			value = "/userId"
 	)
-	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") Long userId) {
+	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") String userId) {
 		this.userCommand.deleteUser(userId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

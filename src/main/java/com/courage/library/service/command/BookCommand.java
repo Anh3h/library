@@ -7,5 +7,5 @@ public interface BookCommand {
 
 	Book createBook(BookDTO book);
 	Book updateBook(BookDTO book);
-	void deleteBook(Long bookId);
+	void deleteBook(String bookId);
 }

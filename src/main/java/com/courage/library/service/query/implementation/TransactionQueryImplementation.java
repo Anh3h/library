@@ -18,7 +18,7 @@ public class TransactionQueryImplementation implements TransactionQuery {
 	private TransactionRepository transactionRepository;
 
 	@Override
-	public Transaction getTransactionById(Long id) {
+	public Transaction getTransactionById(String id) {
 		Transaction transaction = this.transactionRepository.getOne(id);
 		if (transaction == null) {
 			throw NotFoundException.create("Not Found: Transaction does not exist");

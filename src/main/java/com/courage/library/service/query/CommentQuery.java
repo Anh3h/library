@@ -5,6 +5,6 @@ import org.springframework.data.domain.Page;
 
 public interface CommentQuery {
 
-	Comment getCommentById(Long commentId);
+	Comment getCommentById(String commentId);
 	Page<Comment> getComments(Integer pageNumber, Integer pageSize);
 }

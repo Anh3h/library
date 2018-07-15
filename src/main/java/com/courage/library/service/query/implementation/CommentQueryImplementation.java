@@ -18,7 +18,7 @@ public class CommentQueryImplementation implements CommentQuery {
 	private CommentRepository commentRepository;
 
 	@Override
-	public Comment getCommentById(Long commentId) {
+	public Comment getCommentById(String commentId) {
 		Comment comment = this.commentRepository.getOne(commentId);
 		if (comment == null) {
 			throw NotFoundException.create("Not Found: Comment does not exist");

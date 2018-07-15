@@ -33,7 +33,7 @@ public class CommentCommandImplementation implements CommentCommand {
 	}
 
 	@Override
-	public void deleteComment(Long commentId) {
+	public void deleteComment(String commentId) {
 		this.commentRepository.deleteById(commentId);
 	}
 }
