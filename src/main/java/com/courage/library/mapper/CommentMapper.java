@@ -8,17 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class CommentMapper {
 
-	@Autowired
-	private static UserRepository userRepository;
+	private UserRepository userRepository;
 
-	@Autowired
-	private static BookRepository bookRepository;
+	private BookRepository bookRepository;
 
-	public static Comment getComment(CommentDTO commentDTO) {
+	public CommentMapper(UserRepository userRepository, BookRepository bookRepository) {
+		this.userRepository = userRepository;
+		this.bookRepository = bookRepository;
+	}
+
+	public Comment getComment(CommentDTO commentDTO) {
 		Comment comment = new Comment(commentDTO.getText());
-		if (commentDTO.getId() == null)
+		if (commentDTO.getId() != null)
 			comment.setId(commentDTO.getId());
-		comment.setBook(bookRepository.getOne(commentDTO.getId()));
+		comment.setBook(bookRepository.getOne(commentDTO.getBookId()));
 		comment.setUser(userRepository.getOne(commentDTO.getUserId()));
 		return comment;
 	}

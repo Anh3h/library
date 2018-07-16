@@ -7,3 +7,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+security:
+  oauth2:
+    client:
+      client-id: admin
+      client-secret: password
+      refresh-token-validity-seconds: 10000
+      access-token-validity-seconds: 3600

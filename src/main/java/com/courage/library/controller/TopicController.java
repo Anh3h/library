@@ -75,7 +75,7 @@ public class TopicController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Topic> updateTopic(@RequestBody Topic topic, @PathVariable("topicId") String topicId) {
-		if (topic.getId() == topicId) {
+		if (topic.getId().compareTo(topicId) == 0) {
 			Topic updatedTopic = this.topicCommand.updateTopic(topic);
 			return new ResponseEntity<>(updatedTopic, HttpStatus.OK);
 		}

@@ -11,10 +11,11 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Role {
+public class Role implements GrantedAuthority {
 
 	@Id
 	private String id;
@@ -41,5 +42,10 @@ public class Role {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String getAuthority() {
+		return name;
 	}
 }

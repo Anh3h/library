@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.courage.library.model.Book;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserDTO {
 
@@ -20,7 +21,7 @@ public class UserDTO {
 	@NotNull
 	private String email;
 	@NotNull
-	@JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	@NotNull
 	private Date dob;
@@ -28,7 +29,10 @@ public class UserDTO {
 	private String telephone;
 	@NotNull
 	private String roleId;
-	private Set<Book> favoriteBooks;
+	private Set<String> favoriteBookIds;
+
+	public UserDTO() {
+	}
 
 	public UserDTO(String id, @NotNull String firstName, @NotNull String lastName,
 			@NotNull String username, @NotNull String email, @NotNull String password,
@@ -42,7 +46,7 @@ public class UserDTO {
 		this.dob = dob;
 		this.telephone = telephone;
 		this.roleId = roleId;
-		this.favoriteBooks = new HashSet<>();
+		this.favoriteBookIds = new HashSet<>();
 	}
 
 	public String getId() {
@@ -117,15 +121,15 @@ public class UserDTO {
 		this.roleId = roleId;
 	}
 
-	public Set<Book> getFavoriteBooks() {
-		return favoriteBooks;
+	public Set<String> getFavoriteBookIds() {
+		return favoriteBookIds;
 	}
 
-	public void setFavoriteBooks(Set<Book> favoriteBooks) {
-		this.favoriteBooks = favoriteBooks;
+	public void setFavoriteBookIds(Set<String> favoriteBookIds) {
+		this.favoriteBookIds = favoriteBookIds;
 	}
 
-	public void addFavoriteBook(Book book) {
-		this.favoriteBooks = favoriteBooks;
+	public void addFavoriteBook(String bookId) {
+		this.favoriteBookIds.add(bookId);
 	}
 }

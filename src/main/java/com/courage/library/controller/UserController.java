@@ -1,11 +1,13 @@
 package com.courage.library.controller;
 
+import javax.validation.constraints.NotNull;
 import javax.websocket.server.PathParam;
 import java.util.Map;
 
 import com.courage.library.exception.BadRequestException;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.UserDTO;
+import com.courage.library.repository.RoleRepository;
 import com.courage.library.service.command.UserCommand;
 import com.courage.library.service.query.UserQuery;
 import io.swagger.annotations.ApiOperation;
@@ -59,7 +61,7 @@ public class UserController {
 
 	@ApiOperation("Get a user account")
 	@GetMapping(
-			value = "/userId",
+			value = "/{userId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<User> getUser(@PathVariable("userId") String userId) {
@@ -69,12 +71,12 @@ public class UserController {
 
 	@ApiOperation("Update a user account")
 	@PutMapping(
-			value = "/userId",
+			value = "/{userId}",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<User> updateUser(@RequestBody UserDTO user, @PathVariable("userId") String userId) {
-		if (user.getId() == userId) {
+		if (user.getId().compareTo(userId) == 0) {
 			User updatedUser = this.userCommand.updateUser(user);
 			return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 		}
@@ -83,11 +85,10 @@ public class UserController {
 
 	@ApiOperation("Delete a user account")
 	@DeleteMapping(
-			value = "/userId"
+			value = "/{userId}"
 	)
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") String userId) {
 		this.userCommand.deleteUser(userId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-
 }

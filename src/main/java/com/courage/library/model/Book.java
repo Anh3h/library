@@ -3,6 +3,7 @@ package com.courage.library.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -13,7 +14,10 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Book {
 
 	@Id
@@ -54,10 +58,10 @@ public class Book {
 	@ManyToMany(mappedBy = "favoriteBooks")
 	private Set<User> users;
 
-	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
 	private Set<Comment> comments;
 
-	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
 
 	public Book() {

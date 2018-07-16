@@ -3,6 +3,7 @@ package com.courage.library.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,8 +18,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
 	@Id
@@ -49,23 +52,23 @@ public class User {
 	inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
 	private Set<Book> favoriteBooks;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Comment> comments;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
 
 	public User() {
 	}
 
 	public User(@NotNull String firstName, @NotNull String lastName,
-			@NotNull String username, @NotNull String email, @NotNull String password,
-			@NotNull Date dob, @NotNull String telephone) {
+			@NotNull String email, @NotNull String username, @NotNull Date dob,
+			@NotNull String telephone) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
 		this.email = email;
-		this.password = password;
+		this.password = "";
 		this.dob = dob;
 		this.telephone = telephone;
 		this.role = new Role();

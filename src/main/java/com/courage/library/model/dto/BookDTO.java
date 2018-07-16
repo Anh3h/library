@@ -31,6 +31,9 @@ public class BookDTO {
 	@NotNull
 	private Integer numOfBorrows;
 
+	public BookDTO() {
+	}
+
 	public BookDTO(String id, @NotNull String title, @NotNull String isbn,
 			@NotNull String author, String edition, String publisher, Date publicationDate,
 			@NotNull String topicId, String shelf, @NotNull Integer totalQty,

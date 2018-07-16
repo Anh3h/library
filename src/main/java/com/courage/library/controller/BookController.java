@@ -59,7 +59,7 @@ public class BookController {
 
 	@ApiOperation("Get a book")
 	@GetMapping(
-			value = "{userId}",
+			value = "{bookId}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Book> getBook(@PathVariable("bookId") String bookId) {
@@ -74,7 +74,7 @@ public class BookController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Book> updateBook(@RequestBody BookDTO book, @PathVariable("bookId") String bookId) {
-		if (book.getId() == bookId) {
+		if (book.getId().compareTo(bookId) == 0) {
 			Book updatedBook = this.bookCommand.updateBook(book);
 			return new ResponseEntity<>(updatedBook, HttpStatus.OK);
 		}

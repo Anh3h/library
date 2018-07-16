@@ -21,6 +21,9 @@ public class TransactionDTO {
 	@NotNull
 	private Status checkInStatus;
 
+	public TransactionDTO() {
+	}
+
 	public TransactionDTO(String id, @NotNull String userId, @NotNull String bookId,
 			@NotNull Date checkOut, @NotNull Date checkIn,
 			@NotNull Status checkOutStatus, @NotNull Status checkInStatus) {

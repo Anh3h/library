@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TransactionMapper {
 
-	@Autowired
-	private static BookRepository bookRepository;
+	private BookRepository bookRepository;
 
-	@Autowired
-	private static UserRepository userRepository;
+	private UserRepository userRepository;
 
-	public static Transaction getTransaction(TransactionDTO transactionDTO) {
+	public TransactionMapper(BookRepository bookRepository, UserRepository userRepository) {
+		this.bookRepository = bookRepository;
+		this.userRepository = userRepository;
+	}
+
+	public Transaction getTransaction(TransactionDTO transactionDTO) {
 		Transaction transaction = new Transaction(transactionDTO.getCheckOut(), transactionDTO.getCheckIn(),
 			transactionDTO.getCheckOutStatus(), transactionDTO.getCheckInStatus());
 		if (transactionDTO.getId() != null)

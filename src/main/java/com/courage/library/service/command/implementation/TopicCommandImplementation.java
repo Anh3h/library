@@ -1,5 +1,7 @@
 package com.courage.library.service.command.implementation;
 
+import java.util.UUID;
+
 import com.courage.library.exception.ConflictException;
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Topic;
@@ -19,7 +21,7 @@ public class TopicCommandImplementation implements TopicCommand {
 	@Override
 	public Topic createTopic(Topic topic) {
 		if (this.topicRepository.findByName(topic.getName()) == null) {
-			topic.setId(null);
+			topic.setId(UUID.randomUUID().toString());
 			return this.topicRepository.save(topic);
 		}
 		throw ConflictException.create("Conflict: Topic name already exist");

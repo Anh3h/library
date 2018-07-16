@@ -1,5 +1,7 @@
 package com.courage.library.service.command.implementation;
 
+import java.util.UUID;
+
 import com.courage.library.exception.ConflictException;
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Role;
@@ -19,7 +21,7 @@ public class RoleCommandImplementation implements RoleCommand {
 	@Override
 	public Role createRole(Role role) {
 		if (this.roleRepository.findByName(role.getName()) == null) {
-			role.setId(null);
+			role.setId(UUID.randomUUID().toString());
 			return this.roleRepository.save(role);
 		}
 		throw ConflictException.create("Conflict: Role name already exist");

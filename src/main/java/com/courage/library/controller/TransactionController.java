@@ -59,7 +59,6 @@ public class TransactionController {
 	@ApiOperation("Get a transaction")
 	@GetMapping(
 			value = "/{transId}",
-			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Transaction> getTransaction(@PathVariable("transId") String transId) {
@@ -75,7 +74,7 @@ public class TransactionController {
 	)
 	public ResponseEntity<Transaction> updateTransaction(@RequestBody TransactionDTO transaction,
 			@PathVariable("transId") String transId) {
-		if (transaction.getId() == transId) {
+		if (transaction.getId().compareTo(transId) == 0) {
 			Transaction updatedTrans = this.transactionCommand.updateTransaction(transaction);
 			return new ResponseEntity<>(updatedTrans, HttpStatus.OK);
 		}

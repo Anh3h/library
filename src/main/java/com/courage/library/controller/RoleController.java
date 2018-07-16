@@ -69,7 +69,7 @@ public class RoleController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Role> updateRole(@RequestBody Role role, @PathVariable("roleId") String roleId) {
-		if (role.getId() == roleId) {
+		if (role.getId().compareTo(roleId) == 0) {
 			Role updateRole = this.roleCommand.updateRole(role);
 			return new ResponseEntity<>(updateRole, HttpStatus.OK);
 		}

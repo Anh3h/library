@@ -74,7 +74,7 @@ public class CommentController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Comment> updateComment(@RequestBody CommentDTO comment, @PathVariable("commentId") String commentId) {
-		if (comment.getId() == commentId) {
+		if (comment.getId().compareTo(commentId) == 0) {
 			Comment updatedComment = this.commentCommand.updateComment(comment);
 			return new ResponseEntity<>(updatedComment, HttpStatus.OK);
 		}

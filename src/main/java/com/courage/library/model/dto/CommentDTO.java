@@ -12,6 +12,9 @@ public class CommentDTO {
 	@NotNull
 	private String text;
 
+	public CommentDTO() {
+	}
+
 	public CommentDTO(String id, @NotNull String userId, @NotNull String bookId,
 			@NotNull String text) {
 		this.id = id;
