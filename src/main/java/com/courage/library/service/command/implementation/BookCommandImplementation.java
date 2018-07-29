@@ -37,7 +37,8 @@ public class BookCommandImplementation implements BookCommand {
 	@Override
 	public Book updateBook(BookDTO bookDTO) {
 		if (this.bookRepository.existsById(bookDTO.getId())) {
-
+			Book book = new BookMapper(this.topicRepository, this.bookRepository).getBook(bookDTO);
+			return this.bookRepository.save(book);
 		}
 		throw NotFoundException.create("Not Found: Book does not exist");
 	}

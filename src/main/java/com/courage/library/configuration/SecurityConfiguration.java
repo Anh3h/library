@@ -23,6 +23,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	private static final String[] AUTH_WHITELIST = {
+			// -- swagger ui
+			"/swagger-resources/**",
+			"/swagger-ui.html",
+			"/v2/api-docs",
+			"/webjars/**"
+	};
+
 	@Override
 	public UserDetailsService userDetailsServiceBean() {
 		return new CustomUserDetailService();
@@ -56,12 +64,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.formLogin().disable()
-				.anonymous().disable()
-				.httpBasic().and()
+				.antMatcher("/**")
 				.authorizeRequests()
-				.antMatchers("/api/users").permitAll()
-//				.anyRequest().authenticated()
+				.antMatchers(AUTH_WHITELIST).permitAll()
+				.anyRequest().authenticated()
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -73,6 +79,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity webSecurity) {
 		webSecurity
 				.ignoring()
-				.antMatchers(HttpMethod.OPTIONS, "/**");
+				.antMatchers(HttpMethod.OPTIONS, "/**", "/swagger-ui.html**");
 	}
 }

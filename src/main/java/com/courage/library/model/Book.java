@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -55,7 +56,8 @@ public class Book {
 	@Column(nullable = false)
 	private Integer numOfBorrows;
 
-	@ManyToMany(mappedBy = "favoriteBooks")
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "favoriteBooks")
 	private Set<User> users;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
