@@ -1,6 +1,5 @@
 package com.courage.library.controller;
 
-import javax.websocket.server.PathParam;
 import java.util.Map;
 
 import com.courage.library.exception.BadRequestException;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("api/v1/books")
@@ -79,6 +79,16 @@ public class BookController {
 			return new ResponseEntity<>(updatedBook, HttpStatus.OK);
 		}
 		throw BadRequestException.create("Bad Request: Book id in path parameter does not match that in book object");
+	}
+
+	@ApiOperation("Upload cover image of book")
+	@PostMapping(
+			value = "/{bookId}"
+	)
+	public ResponseEntity<Book> uploadCoverImage(@PathVariable("bookId") String bookId,
+			@RequestParam(value = "image", required = true) MultipartFile image) {
+		Book book = this.bookCommand.uploadImage(bookId, image);
+		return new ResponseEntity<>(book, HttpStatus.OK);
 	}
 
 	@ApiOperation("Delete a book")

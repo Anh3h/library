@@ -4,7 +4,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -55,6 +54,7 @@ public class Book {
 	@NotNull
 	@Column(nullable = false)
 	private Integer numOfBorrows;
+	private String coverImage;
 
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "favoriteBooks")
@@ -65,6 +65,9 @@ public class Book {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
+	private Set<Notification> notifications;
 
 	public Book() {
 	}
@@ -197,6 +200,14 @@ public class Book {
 
 	public void setNumOfBorrows(Integer numOfBorrows) {
 		this.numOfBorrows = numOfBorrows;
+	}
+
+	public String getCoverImage() {
+		return coverImage;
+	}
+
+	public void setCoverImage(String coverImage) {
+		this.coverImage = coverImage;
 	}
 
 	public Set<User> getUsers() {

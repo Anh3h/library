@@ -1,14 +1,13 @@
 package com.courage.library.controller;
 
-import javax.validation.constraints.NotNull;
-import javax.websocket.server.PathParam;
 import java.util.Map;
 
 import com.courage.library.exception.BadRequestException;
+import com.courage.library.model.Notification;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.UserDTO;
-import com.courage.library.repository.RoleRepository;
 import com.courage.library.service.command.UserCommand;
+import com.courage.library.service.query.NotificationQuery;
 import com.courage.library.service.query.UserQuery;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

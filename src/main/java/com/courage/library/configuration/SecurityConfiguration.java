@@ -1,14 +1,15 @@
 package com.courage.library.configuration;
 
 import com.courage.library.service.query.CustomUserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,22 +18,32 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebSecurity
+@Order(SecurityProperties.IGNORED_ORDER)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_WHITELIST = {
-			// -- swagger ui
-			"/swagger-resources/**",
-			"/swagger-ui.html",
 			"/v2/api-docs",
-			"/webjars/**"
+			"/configuration/ui",
+			"/swagger-resources",
+			"/configuration/security",
+			"/swagger-ui.html",
+			"/webjars/**",
+			"/swagger-resources/configuration/ui",
+			"/swagger-ui.html",
+			"/swagger-resources/configuration/security"
 	};
 
-	@Override
-	public UserDetailsService userDetailsServiceBean() {
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public UserDetailsService userDetailsService() {
 		return new CustomUserDetailService();
 	}
 
@@ -45,14 +56,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
 	@Override
 	public AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManager();
+		return super.authenticationManagerBean();
 	}
 
 	@Override
@@ -64,9 +70,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.antMatcher("/**")
+				.formLogin().disable()
+				.anonymous().disable()
+				.httpBasic().and()
+//				.antMatcher("/**")
 				.authorizeRequests()
-				.antMatchers(AUTH_WHITELIST).permitAll()
+//				.antMatchers(AUTH_WHITELIST).permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.sessionManagement()
@@ -79,6 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity webSecurity) {
 		webSecurity
 				.ignoring()
-				.antMatchers(HttpMethod.OPTIONS, "/**", "/swagger-ui.html**");
+				.antMatchers()
+				.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 }

@@ -4,7 +4,6 @@ import com.courage.library.model.Transaction;
 import com.courage.library.model.dto.TransactionDTO;
 import com.courage.library.repository.BookRepository;
 import com.courage.library.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TransactionMapper {
 

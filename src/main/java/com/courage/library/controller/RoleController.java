@@ -1,9 +1,6 @@
 package com.courage.library.controller;
 
-import javax.websocket.server.PathParam;
-
 import java.util.List;
-import java.util.Map;
 
 import com.courage.library.exception.BadRequestException;
 import com.courage.library.model.Role;
@@ -11,7 +8,6 @@ import com.courage.library.service.command.RoleCommand;
 import com.courage.library.service.query.RoleQuery;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

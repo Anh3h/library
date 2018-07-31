@@ -3,8 +3,6 @@ package com.courage.library.model.dto;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-import com.courage.library.model.Topic;
-
 public class BookDTO {
 
 	private String id;

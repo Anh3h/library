@@ -4,7 +4,6 @@ import com.courage.library.model.Comment;
 import com.courage.library.model.dto.CommentDTO;
 import com.courage.library.repository.BookRepository;
 import com.courage.library.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class CommentMapper {
 

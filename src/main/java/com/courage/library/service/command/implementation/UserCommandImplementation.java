@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import com.courage.library.exception.ConflictException;
 import com.courage.library.exception.NotFoundException;
-//import com.courage.library.mapper.UserMapper;
 import com.courage.library.mapper.UserMapper;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.UserDTO;
@@ -16,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+//import com.courage.library.mapper.UserMapper;
 
 @Service
 @Transactional

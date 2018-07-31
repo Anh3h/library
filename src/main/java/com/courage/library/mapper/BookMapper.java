@@ -4,7 +4,6 @@ import com.courage.library.model.Book;
 import com.courage.library.model.dto.BookDTO;
 import com.courage.library.repository.BookRepository;
 import com.courage.library.repository.TopicRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class BookMapper {
 
