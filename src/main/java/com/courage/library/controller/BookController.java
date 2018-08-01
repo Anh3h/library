@@ -49,10 +49,14 @@ public class BookController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Page<Book>> getBooks(@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size) {
+			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "sort", required = false) Boolean sort) {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
+		if (sort) {
+			Page<Book> books = this.bookQuery.getPopularBooks(page, size);
+			return new ResponseEntity<>(books, HttpStatus.OK);
+		}
 		Page<Book> books = this.bookQuery.getBooks(page, size);
 		return new ResponseEntity<>(books, HttpStatus.OK);
 	}

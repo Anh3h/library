@@ -3,6 +3,8 @@ package com.courage.library.model.dto;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BookDTO {
 
 	private String id;
@@ -27,6 +29,7 @@ public class BookDTO {
 	@NotNull
 	private Integer downVotes;
 	@NotNull
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Integer numOfBorrows;
 
 	public BookDTO() {

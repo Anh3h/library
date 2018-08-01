@@ -19,9 +19,7 @@ public class BookMapper {
 	public Book getBook(BookDTO bookDTO) {
 		Book book = new Book(bookDTO.getTitle(), bookDTO.getIsbn(), bookDTO.getAuthor(), bookDTO.getEdition(),
 				bookDTO.getPublisher(), bookDTO.getPublicationDate(), bookDTO.getShelf(), bookDTO.getTotalQty(),
-				bookDTO.getAvailableQty(), bookDTO.getUpVotes(), bookDTO.getDownVotes(), bookDTO.getNumOfBorrows());
-		if (bookDTO.getId() != null)
-			book.setId(bookDTO.getId());
+				bookDTO.getAvailableQty(), bookDTO.getUpVotes(), bookDTO.getDownVotes());
 		book.setTopic(topicRepository.getOne(bookDTO.getTopicId()));
 		return book;
 	}
@@ -30,8 +28,7 @@ public class BookMapper {
 		Book book = bookRepository.getOne(bookDTO.getId());
 		book.genericSetter(bookDTO.getTitle(), bookDTO.getIsbn(), bookDTO.getAuthor(), bookDTO.getEdition(),
 				bookDTO.getPublisher(), bookDTO.getPublicationDate(), bookDTO.getShelf(), bookDTO.getTotalQty(),
-				bookDTO.getAvailableQty(), bookDTO.getUpVotes(), bookDTO.getDownVotes(), bookDTO.getNumOfBorrows());
-		if (bookDTO.getId() != null);
+				bookDTO.getAvailableQty(), bookDTO.getUpVotes(), bookDTO.getDownVotes());
 		return book;
 	}
 }

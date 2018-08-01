@@ -7,6 +7,7 @@ import com.courage.library.service.query.BookQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,5 +30,10 @@ public class BookQueryImplementation implements BookQuery {
 	@Override
 	public Page<Book> getBooks(Integer pageNumber, Integer pageSize) {
 		return this.bookRepository.findAll(PageRequest.of(pageNumber-1, pageSize));
+	}
+
+	@Override
+	public Page<Book> getPopularBooks(Integer pageNumber, Integer pageSize) {
+		return this.bookRepository.findAll(PageRequest.of(pageNumber-1, pageSize, Sort.Direction.DESC, "numOfBorrows"));
 	}
 }

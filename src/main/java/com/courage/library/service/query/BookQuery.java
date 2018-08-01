@@ -7,4 +7,5 @@ public interface BookQuery {
 
 	Book getBookById(String bookId);
 	Page<Book> getBooks(Integer pageNumber, Integer pageSize);
+	Page<Book> getPopularBooks(Integer pageNumber, Integer pageSize);
 }

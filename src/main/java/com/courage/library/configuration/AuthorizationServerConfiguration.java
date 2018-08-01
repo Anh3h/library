@@ -99,7 +99,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 		return tokenService;
 	}
 
-	/*@Bean
+	@Bean
 	public FilterRegistrationBean corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
@@ -111,6 +111,5 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		return bean;
-	}*/
-
+	}
 }

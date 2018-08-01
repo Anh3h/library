@@ -53,6 +53,7 @@ public class BookCommandImplementation implements BookCommand {
 		if (this.bookRepository.findByIsbn(bookDTO.getIsbn()) == null) {
 			Book book = new BookMapper(this.topicRepository, this.bookRepository).getBook(bookDTO);
 			book.setId(UUID.randomUUID().toString());
+			book.setAvailableQty(book.getTotalQty());
 			return this.bookRepository.save(book);
 		}
 		throw ConflictException.create("Conflict: Book with ISBN, {0} already exist", bookDTO.getIsbn());
@@ -81,7 +82,7 @@ public class BookCommandImplementation implements BookCommand {
 	@Override
 	public Book updateBook(BookDTO bookDTO) {
 		if (this.bookRepository.existsById(bookDTO.getId())) {
-			Book book = new BookMapper(this.topicRepository, this.bookRepository).getBook(bookDTO);
+			Book book = new BookMapper(this.topicRepository, this.bookRepository).getFromExistingBook(bookDTO);
 			Book newBook = this.bookRepository.save(book);
 			newBook.getUsers().forEach(user -> {
 				Notification notification = new Notification(UUID.randomUUID().toString(),

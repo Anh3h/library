@@ -19,10 +19,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 	private String resourceId;
 
 	@Autowired
-	public TokenStore tokenStore;
+	private DefaultTokenServices tokenServices;
 
 	@Autowired
-	private DefaultTokenServices tokenServices;
+	public TokenStore tokenStore;
 
 	@Override
 	public void configure( ResourceServerSecurityConfigurer resources ) {
@@ -40,5 +40,4 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 				.authorizeRequests()
 				.antMatchers(HttpMethod.OPTIONS).permitAll();
 	}
-
 }

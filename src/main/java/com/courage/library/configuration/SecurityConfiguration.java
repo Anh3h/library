@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@Order(SecurityProperties.IGNORED_ORDER)
+@Order(SecurityProperties.BASIC_AUTH_ORDER)
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -34,7 +34,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			"/webjars/**",
 			"/swagger-resources/configuration/ui",
 			"/swagger-ui.html",
-			"/swagger-resources/configuration/security"
+			"/swagger-resources/configuration/security",
+			"/api/v1/users**"
 	};
 
 	@Bean
@@ -58,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManagerBean();
+		return super.authenticationManager();
 	}
 
 	@Override
@@ -70,13 +71,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.formLogin().disable()
 				.anonymous().disable()
 				.httpBasic().and()
 //				.antMatcher("/**")
 				.authorizeRequests()
-//				.antMatchers(AUTH_WHITELIST).permitAll()
-				.anyRequest().authenticated()
+				.antMatchers(AUTH_WHITELIST).permitAll()
+				//.authorizeRequests().anyRequest().authenticated()
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -88,7 +88,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity webSecurity) {
 		webSecurity
 				.ignoring()
-				.antMatchers()
 				.antMatchers(HttpMethod.OPTIONS, "/**");
 	}
 }

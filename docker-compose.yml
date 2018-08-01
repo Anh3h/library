@@ -1,0 +1,39 @@
+version: "3"
+services:
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+    healthcheck:
+      test: mysql --user=root --password=mysql -h 172.16.238.4
+      interval: 5s
+      retries: 20
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.4
+    volumes:
+          - mysql-volume:/var/lib/mysql
+
+volumes:
+      mysql-volume:
+
+#  library-ms:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: library-ms
+#    networks:
+#      default:
+#        ipv4_address: 172.16.238.6
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+

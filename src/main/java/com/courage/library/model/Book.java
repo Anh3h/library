@@ -74,7 +74,7 @@ public class Book {
 
 	public Book(@NotNull String title, @NotNull String isbn, @NotNull String author, String edition, String publisher,
 			Date publicationDate, String shelf, @NotNull Integer totalQty, @NotNull Integer availableQty,
-			@NotNull Integer upVotes, @NotNull Integer downVotes, @NotNull Integer numOfBorrows) {
+			@NotNull Integer upVotes, @NotNull Integer downVotes) {
 		this.title = title;
 		this.isbn = isbn;
 		this.author = author;
@@ -87,7 +87,7 @@ public class Book {
 		this.availableQty = availableQty;
 		this.upVotes = upVotes;
 		this.downVotes = downVotes;
-		this.numOfBorrows = numOfBorrows;
+		this.numOfBorrows = 0;
 	}
 
 	public String getId() {
@@ -220,7 +220,7 @@ public class Book {
 
 	public void genericSetter(@NotNull String title, @NotNull String isbn, @NotNull String author, String edition, String publisher,
 			Date publicationDate, String shelf, @NotNull Integer totalQty, @NotNull Integer availableQty,
-			@NotNull Integer upVotes, @NotNull Integer downVotes, @NotNull Integer numOfBorrows) {
+			@NotNull Integer upVotes, @NotNull Integer downVotes) {
 		this.title = title;
 		this.isbn = isbn;
 		this.author = author;
@@ -232,6 +232,6 @@ public class Book {
 		this.availableQty = availableQty;
 		this.upVotes = upVotes;
 		this.downVotes = downVotes;
-		this.numOfBorrows = numOfBorrows;
+		this.numOfBorrows = 0;
 	}
 }
