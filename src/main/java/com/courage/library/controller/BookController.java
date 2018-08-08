@@ -49,12 +49,26 @@ public class BookController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Page<Book>> getBooks(@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "sort", required = false) Boolean sort) {
+			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "sort", required = false) Boolean sort,
+			@RequestParam(value = "title", required = false) String title, @RequestParam(value = "author", required = false) String author,
+			@RequestParam(value = "topicId", required = false) String topicId) {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
-		if (sort) {
+		if (sort != null && sort) {
 			Page<Book> books = this.bookQuery.getPopularBooks(page, size);
+			return new ResponseEntity<>(books, HttpStatus.OK);
+		}
+		if (title != null) {
+			Page<Book> books = this.bookQuery.getBooksByTitle(title, page, size);
+			return new ResponseEntity<>(books, HttpStatus.OK);
+		}
+		if (topicId != null) {
+			Page<Book> books = this.bookQuery.getBooksByTopic(topicId, page, size);
+			return new ResponseEntity<>(books, HttpStatus.OK);
+		}
+		if (author != null) {
+			Page<Book> books = this.bookQuery.getBooksByAuthor(author, page, size);
 			return new ResponseEntity<>(books, HttpStatus.OK);
 		}
 		Page<Book> books = this.bookQuery.getBooks(page, size);

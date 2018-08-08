@@ -3,6 +3,7 @@ package com.courage.library.controller;
 import java.util.Map;
 
 import com.courage.library.exception.BadRequestException;
+import com.courage.library.model.Book;
 import com.courage.library.model.Comment;
 import com.courage.library.model.dto.CommentDTO;
 import com.courage.library.service.command.CommentCommand;
@@ -48,10 +49,14 @@ public class CommentController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Page<Comment>> getComments(@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size) {
+			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "book", required = false) String book) {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
+		if (book != null) {
+			Page<Comment> comments = this.commentQuery.findCommentsByBook(book, page, size);
+			return new ResponseEntity<>(comments, HttpStatus.OK);
+		}
 		Page<Comment> comments = this.commentQuery.getComments(page, size);
 		return new ResponseEntity<>(comments, HttpStatus.OK);
 	}
