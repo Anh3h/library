@@ -1,7 +1,6 @@
 package com.courage.library.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.Map;
 
 import com.courage.library.model.Notification;
@@ -18,6 +17,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,20 +59,19 @@ public class AccountController {
 
 	@ApiOperation("Get logged-in user's notification")
 	@GetMapping(
-			value = "/notifications",
+			value = "/users/{userId}/notifications",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Page<Notification>> getNotifications(HttpServletRequest request, @RequestParam( value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size, @RequestParam("done") Boolean done) {
+	public ResponseEntity<Page<Notification>> getNotifications(@PathVariable("userId") String userId, @RequestParam( value = "page", required = false) Integer page,
+			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "done", required = false) Boolean done) {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
-		System.out.println(request.getUserPrincipal().getName());
-		if (done) {
-			Page<Notification> notifications = this.notificationQuery.getUndoneNotifications(page, size);
+		if (done != null && done) {
+			Page<Notification> notifications = this.notificationQuery.getUndoneNotifications(userId, page, size);
 			return new ResponseEntity<>(notifications, HttpStatus.OK);
 		}
-		Page<Notification> notifications = this.notificationQuery.getNotifications(page, size);
+		Page<Notification> notifications = this.notificationQuery.getNotifications(userId, page, size);
 		return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
 

@@ -21,8 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@Order(SecurityProperties.BASIC_AUTH_ORDER)
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Order(SecurityProperties.IGNORED_ORDER )
+//@EnableGlobalMethodSecurity()
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_WHITELIST = {
@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			"/swagger-resources/configuration/ui",
 			"/swagger-ui.html",
 			"/swagger-resources/configuration/security",
-			"/api/v1/users**"
+			"/oauth/token**"
 	};
 
 	@Bean
@@ -71,12 +71,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+				.formLogin().disable()
 				.anonymous().disable()
 				.httpBasic().and()
-//				.antMatcher("/**")
+				.antMatcher("/**")
 				.authorizeRequests()
 				.antMatchers(AUTH_WHITELIST).permitAll()
-				//.authorizeRequests().anyRequest().authenticated()
+//				.anyRequest().authenticated()
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

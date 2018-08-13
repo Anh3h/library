@@ -3,7 +3,6 @@ package com.courage.library.controller;
 import java.util.Map;
 
 import com.courage.library.exception.BadRequestException;
-import com.courage.library.model.Book;
 import com.courage.library.model.Comment;
 import com.courage.library.model.dto.CommentDTO;
 import com.courage.library.service.command.CommentCommand;

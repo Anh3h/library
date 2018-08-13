@@ -27,6 +27,15 @@ public class UserQueryImplementation implements UserQuery {
 	}
 
 	@Override
+	public User getUserByUsername(String username) {
+		User user = this.userRepository.findByUsername(username);
+		if (user == null) {
+			throw NotFoundException.create("Not Found: User does not exist");
+		}
+		return user;
+	}
+
+	@Override
 	public Page<User> getUsers(Integer pageNumber, Integer pageSize) {
 		return this.userRepository.findAll(PageRequest.of(pageNumber-1, pageSize));
 	}

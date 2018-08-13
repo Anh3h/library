@@ -3,11 +3,9 @@ package com.courage.library.controller;
 import java.util.Map;
 
 import com.courage.library.exception.BadRequestException;
-import com.courage.library.model.Notification;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.UserDTO;
 import com.courage.library.service.command.UserCommand;
-import com.courage.library.service.query.NotificationQuery;
 import com.courage.library.service.query.UserQuery;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +63,16 @@ public class UserController {
 	)
 	public ResponseEntity<User> getUser(@PathVariable("userId") String userId) {
 		User user = this.userQuery.getUserById(userId);
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
+	@ApiOperation("Find a user account by username")
+	@GetMapping(
+			value = "/username/{username}",
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+		User user = this.userQuery.getUserByUsername(username);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
