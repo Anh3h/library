@@ -38,7 +38,9 @@ public class TransactionController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDTO transaction) {
+		System.out.println(transaction.getBookId());
 		Transaction newTransaction = this.transactionCommand.createTransaction(transaction);
+		System.out.println(newTransaction.getBook().getId());
 		return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
 	}
 
@@ -47,10 +49,14 @@ public class TransactionController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Page<Transaction>> getTransactions(@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size) {
+			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "userId", required = false) String userId) {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
+		if( userId != null ) {
+			Page<Transaction> transactions =  this.transactionQuery.getTransactionByUser(userId, page, size);
+			return new ResponseEntity<>(transactions, HttpStatus.OK);
+		}
 		Page<Transaction> transactions = this.transactionQuery.getTransactions(page, size);
 		return new ResponseEntity<>(transactions, HttpStatus.OK);
 	}

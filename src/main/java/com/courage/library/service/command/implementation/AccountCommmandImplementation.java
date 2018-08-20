@@ -22,8 +22,11 @@ public class AccountCommmandImplementation implements AccountCommand {
 	@Override
 	public User updatePassword(PasswordDTO passwordDTO) {
 		User user = this.userRepository.findByEmail(passwordDTO.getEmail());
-		user.setPassword(this.passwordEncoder.encode(passwordDTO.getPassword()));
-		this.userRepository.save(user);
-		return user;
+		if (user != null) {
+			user.setPassword(this.passwordEncoder.encode(passwordDTO.getPassword()));
+			this.userRepository.save(user);
+			return user;
+		}
+		return null;
 	}
 }

@@ -4,9 +4,12 @@
 /gradle
 /out
 /src
+.gitignore
 build.gradle
 gradlew
 gradlew.bat
 library.iml
 settings.gradle
 README.md
+shut-down.sh
+start-up.sh

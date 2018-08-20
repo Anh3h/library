@@ -27,8 +27,8 @@ public class UserQueryImplementation implements UserQuery {
 	}
 
 	@Override
-	public User getUserByUsername(String username) {
-		User user = this.userRepository.findByUsername(username);
+	public User getUserByEmail(String email) {
+		User user = this.userRepository.findByEmail(email);
 		if (user == null) {
 			throw NotFoundException.create("Not Found: User does not exist");
 		}

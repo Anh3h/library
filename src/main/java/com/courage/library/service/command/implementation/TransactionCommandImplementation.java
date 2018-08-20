@@ -41,6 +41,7 @@ public class TransactionCommandImplementation implements TransactionCommand {
 				book.setNumOfBorrows(book.getNumOfBorrows() + 1);
 				transaction.setId(UUID.randomUUID().toString());
 				this.bookRepository.save(book);
+				System.out.println(transaction.getId());
 				return this.transactionRepository.save(transaction);
 			}
 			throw BadRequestException.create("Bad Request: The checkout date for the book must be before the check-in date");

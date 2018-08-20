@@ -5,6 +5,9 @@ public class PasswordDTO {
 	private String email;
 	private String password;
 
+	public PasswordDTO() {
+	}
+
 	public PasswordDTO(String email, String password) {
 		this.email = email;
 		this.password = password;

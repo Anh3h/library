@@ -66,13 +66,13 @@ public class UserController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
-	@ApiOperation("Find a user account by username")
+	@ApiOperation("Find a user account by email")
 	@GetMapping(
-			value = "/username/{username}",
+			value = "/email/{email}",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
-		User user = this.userQuery.getUserByUsername(username);
+	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
+		User user = this.userQuery.getUserByEmail(email);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 

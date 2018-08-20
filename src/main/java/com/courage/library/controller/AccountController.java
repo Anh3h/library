@@ -3,9 +3,11 @@ package com.courage.library.controller;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+import com.courage.library.exception.BadRequestException;
 import com.courage.library.model.Notification;
 import com.courage.library.model.dto.PasswordDTO;
 import com.courage.library.service.command.AccountCommand;
+import com.courage.library.service.command.NotificationCommand;
 import com.courage.library.service.query.NotificationQuery;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class AccountController {
 	private NotificationQuery notificationQuery;
 
 	@Autowired
+	private NotificationCommand notificationCommand;
+
+	@Autowired
 	private TokenStore tokenStore;
 
 	@ApiOperation("Reset password")
@@ -45,17 +50,15 @@ public class AccountController {
 		this.accountCommand.updatePassword(passwordDTO);
 
 		//Logging user out of current session
-		String authHeader = request.getHeader("Authorization");
+		/*String authHeader = request.getHeader("Authorization");
 		if (authHeader != null) {
 			String tokenValue = authHeader.replace("Bearer", "").trim();
 			OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
 			tokenStore.removeAccessToken(accessToken);
-		}
+		}*/
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
-
 
 	@ApiOperation("Get logged-in user's notification")
 	@GetMapping(
@@ -67,7 +70,7 @@ public class AccountController {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
-		if (done != null && done) {
+		if (done != null && done == false) {
 			Page<Notification> notifications = this.notificationQuery.getUndoneNotifications(userId, page, size);
 			return new ResponseEntity<>(notifications, HttpStatus.OK);
 		}
@@ -75,4 +78,17 @@ public class AccountController {
 		return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
 
+	@ApiOperation("Update logged-in user's notification")
+	@PutMapping(
+			value = "notifications/{notificationId}",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<Notification> updateNotifications(@RequestBody Notification notification, @PathVariable("notificationId") String notificationId) {
+		if (notification.getId().compareTo(notificationId) == 0) {
+			Notification updatedNotification = this.notificationCommand.updateNotification(notification);
+			return new ResponseEntity<>(updatedNotification, HttpStatus.OK);
+		}
+		throw BadRequestException.create("Bad Request: Notification id in path parameter does not match that in notification object");
+	}
 }
