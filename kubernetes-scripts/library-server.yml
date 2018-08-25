@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-service
+  namespace: default
+spec:
+  selector:
+    app: library-server
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: library-server-cluster
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: library-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: library-server
+    spec:
+      containers:
+      - name: myapp
+        image: docker.io/anh3h/library-server
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://35.196.130.21:3306/library?autoReconnect=true&useSSL=false
+        ports:
+          - containerPort: 8080

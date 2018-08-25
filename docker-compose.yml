@@ -28,6 +28,10 @@ services:
     networks:
       net:
         ipv4_address: 172.16.238.3
+    deploy:
+      replicas: 2
+      # restart_policy:
+      #   condition: on-failure
   library-web-app:
     image: library-app:latest
     container_name: library-web-app
@@ -36,6 +40,22 @@ services:
     networks:
       net:
         ipv4_address: 172.16.238.4
+    deploy:
+      replicas: 2
+      # restart_policy:
+      #   condition: on-failure
+  library-admin-panel:
+    image: library-admin-panel:latest
+    container_name: library-admin-panel
+    ports:
+      - 8001:80
+    networks:
+      net:
+        ipv4_address: 172.16.238.5
+    deploy:
+      replicas: 2
+      # restart_policy:
+      #   condition: on-failure
 
 # volumes:
 #   mysql-volume:

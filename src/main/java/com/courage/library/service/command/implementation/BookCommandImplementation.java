@@ -1,5 +1,6 @@
 package com.courage.library.service.command.implementation;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,7 +16,14 @@ import com.courage.library.repository.NotificationRepository;
 import com.courage.library.repository.TopicRepository;
 import com.courage.library.service.command.BookCommand;
 
-
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +43,8 @@ public class BookCommandImplementation implements BookCommand {
 	@Autowired
 	private NotificationRepository notificationRepository;
 
-	/*Storage storage = StorageOptions.getDefaultInstance().getService();
-	Bucket bucket = storage.get("e-library");*/
+	Storage storage = StorageOptions.getDefaultInstance().getService();
+	Bucket bucket = storage.get("e-library");
 
 	@Override
 	public Book createBook(BookDTO bookDTO) {
@@ -53,21 +61,20 @@ public class BookCommandImplementation implements BookCommand {
 	public Book uploadImage(String bookId, MultipartFile image) {
 		Book book = this.bookRepository.getOne(bookId);
 		this.validateFile(image);
-//		String imageName = image.getOriginalFilename();
-//		final String extension = (imageName.substring(imageName.lastIndexOf('.') + 1));
-//		DateTimeFormatter dtf = DateTimeFormat.forPattern("-YYYY-MM-dd-HHmmssSSS");
-//		String dtString = DateTime.now(DateTimeZone.UTC).toString(dtf);
-//		final String updatedFileName = StringUtils.cleanPath(image.getOriginalFilename()).substring(0, imageName.indexOf('.'))
-//				+ dtString + "." + extension;
-		/*try {
+		String imageName = image.getOriginalFilename();
+		final String extension = (imageName.substring(imageName.lastIndexOf('.') + 1));
+		DateTimeFormatter dtf = DateTimeFormat.forPattern("-YYYY-MM-dd-HHmmssSSS");
+		String dtString = DateTime.now(DateTimeZone.UTC).toString(dtf);
+		final String updatedFileName = StringUtils.cleanPath(image.getOriginalFilename()).substring(0, imageName.indexOf('.'))
+				+ dtString + "." + extension;
+		try {
 			BlobInfo blobInfo = bucket.create(updatedFileName, image.getInputStream());
 			book.setCoverImage(blobInfo.getMediaLink());
 			this.bookRepository.save(book);
 			return book;
 		} catch (IOException ex) {
 			throw BadRequestException.create(ex.getMessage());
-		}*/
-		return book;
+		}
 	}
 
 	@Override

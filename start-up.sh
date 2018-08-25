@@ -19,5 +19,5 @@ if ! mysql -uroot -pmysql -h172.16.238.2 -e 'use library'; then
   mysql -uroot -pmysql -h172.16.238.2 < "library.sql"
 fi
 
-echo "Starting library server"
+echo "Starting entire e-library system"
 docker-compose up
