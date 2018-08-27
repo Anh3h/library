@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-admin-service
+  namespace: default
+spec:
+  selector:
+    app: library-admin-app
+  ports:
+    - port: 8001
+      targetPort: 80
+  type: LoadBalancer
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: library-admin-cluster
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: library-admin-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: library-admin-app
+    spec:
+      containers:
+      - name: library-admin-app
+        image: docker.io/anh3h/library-admin-app
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8001

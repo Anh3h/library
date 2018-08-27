@@ -23,17 +23,25 @@ services:
       args:
         - database_ip=172.16.238.2
     container_name: library-ms
+    image: docker.io/anh3h/library-server:latest
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://172.16.238.2:3306/library?autoReconnect=true&useSSL=false
     ports:
       - 8080:8080
     networks:
       net:
         ipv4_address: 172.16.238.3
+    healthcheck:
+      test: curl -f -s http://localhost:8080 || exit 1
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
     deploy:
-      replicas: 2
-      # restart_policy:
-      #   condition: on-failure
+      replicas: 1
+      restart_policy:
+        condition: on-failure
   library-web-app:
-    image: library-app:latest
+    image: docker.io/anh3h/library-app:latest
     container_name: library-web-app
     ports:
       - 8000:80
@@ -42,10 +50,10 @@ services:
         ipv4_address: 172.16.238.4
     deploy:
       replicas: 2
-      # restart_policy:
-      #   condition: on-failure
+      restart_policy:
+        condition: on-failure
   library-admin-panel:
-    image: library-admin-panel:latest
+    image: docker.io/anh3h/library-admin-app
     container_name: library-admin-panel
     ports:
       - 8001:80
@@ -54,8 +62,8 @@ services:
         ipv4_address: 172.16.238.5
     deploy:
       replicas: 2
-      # restart_policy:
-      #   condition: on-failure
+      restart_policy:
+        condition: on-failure
 
 # volumes:
 #   mysql-volume:

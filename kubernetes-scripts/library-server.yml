@@ -19,7 +19,7 @@ metadata:
   name: library-server-cluster
   namespace: default
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: library-server
@@ -34,11 +34,11 @@ spec:
         app: library-server
     spec:
       containers:
-      - name: myapp
+      - name: library-server
         image: docker.io/anh3h/library-server
         imagePullPolicy: IfNotPresent
         env:
           - name: SPRING_DATASOURCE_URL
-            value: jdbc:mysql://35.196.130.21:3306/library?autoReconnect=true&useSSL=false
+            value: jdbc:mysql://35.229.63.46:3306/library?autoReconnect=true&useSSL=false
         ports:
           - containerPort: 8080

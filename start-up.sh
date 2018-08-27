@@ -20,4 +20,4 @@ if ! mysql -uroot -pmysql -h172.16.238.2 -e 'use library'; then
 fi
 
 echo "Starting entire e-library system"
-docker-compose up
+docker-compose up --build
