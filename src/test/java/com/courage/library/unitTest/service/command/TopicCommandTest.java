@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.courage.library.exception.ConflictException;
+import com.courage.library.exception.NotFoundException;
 import com.courage.library.factory.TopicFactory;
 import com.courage.library.model.Topic;
 import com.courage.library.repository.TopicRepository;
@@ -52,6 +53,25 @@ public class TopicCommandTest {
 		given(this.topicRepository.findByName(topic.getName())).willReturn(topic);
 
 		this.topicCommand.createTopic(topic);
+	}
+
+	@Test
+	public void updateTopic_returnsUpdatedTopic() {
+		Topic topic = TopicFactory.instance();
+		given(this.topicRepository.existsById(topic.getId())).willReturn(true);
+		given(this.topicRepository.save(any(Topic.class))).willReturn(topic);
+
+		Topic updatedTopic = this.topicCommand.updateTopic(topic);
+
+		assertThat(updatedTopic).isEqualToComparingFieldByField(topic);
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void updateNonExistingTopic_throwsNotFoundException() {
+		Topic topic = TopicFactory.instance();
+		given(this.topicRepository.existsById(topic.getId())).willReturn(false);
+
+		this.topicCommand.updateTopic(topic);
 	}
 
 }
