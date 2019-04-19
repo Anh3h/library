@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("api/v1")
-public class InitializeController {
+public class HealthCheckController {
 
 
 	@GetMapping(
-			value = "/initialize"
+			value = "/healthCheck"
 	)
 	public ResponseEntity<HttpStatus> initialize() {
-		System.out.println("Initializing project");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

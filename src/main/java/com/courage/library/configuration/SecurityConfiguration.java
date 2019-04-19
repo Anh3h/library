@@ -84,6 +84,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		webSecurity
 				.ignoring()
 				.antMatchers(HttpMethod.OPTIONS, "/**")
-				.antMatchers(HttpMethod.POST, "/api/v1/users");
+				.antMatchers(HttpMethod.POST, "/api/v1/users")
+				.antMatchers(HttpMethod.GET, "/api/v1/healthCheck");
 	}
 }
