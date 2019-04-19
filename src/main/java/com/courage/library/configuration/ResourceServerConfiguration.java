@@ -32,12 +32,4 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 				.tokenStore(tokenStore);
 	}
 
-	@Override
-	public void configure( HttpSecurity http ) throws Exception {
-		http
-				.csrf().disable()
-				.anonymous().disable()
-				.authorizeRequests()
-				.antMatchers(HttpMethod.OPTIONS).permitAll();
-	}
 }

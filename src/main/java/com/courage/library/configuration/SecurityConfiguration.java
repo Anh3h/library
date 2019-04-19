@@ -21,8 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@Order(SecurityProperties.IGNORED_ORDER )
-//@EnableGlobalMethodSecurity()
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_WHITELIST = {
@@ -73,11 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http
 				.formLogin().disable()
 				.anonymous().disable()
-				.httpBasic().and()
-				.antMatcher("/**")
-				.authorizeRequests()
-				.antMatchers(AUTH_WHITELIST).permitAll()
-//				.anyRequest().authenticated()
+				.httpBasic()
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -89,6 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity webSecurity) {
 		webSecurity
 				.ignoring()
-				.antMatchers(HttpMethod.OPTIONS, "/**");
+				.antMatchers(HttpMethod.OPTIONS, "/**")
+				.antMatchers(HttpMethod.POST, "/api/v1/users");
 	}
 }

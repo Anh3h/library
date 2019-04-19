@@ -44,7 +44,7 @@ public class BookCommandImplementation implements BookCommand {
 	private NotificationRepository notificationRepository;
 
 	Storage storage = StorageOptions.getDefaultInstance().getService();
-	Bucket bucket = storage.get("e-library");
+	Bucket bucket = storage.get("e-library-1");
 
 	@Override
 	public Book createBook(BookDTO bookDTO) {
