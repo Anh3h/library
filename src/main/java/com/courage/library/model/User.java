@@ -76,6 +76,14 @@ public class User {
 		this.favoriteBooks = new HashSet<>();
 	}
 
+	public User(String id, @NotNull String firstName, @NotNull String lastName, String username,
+			@NotNull String email, @NotNull String password, Date dob, String telephone,
+			@NotNull Role role) {
+		this(firstName, lastName, email, username, dob, telephone);
+		this.id = id;
+		this.role = role;
+	}
+
 	public String getId() {
 		return id;
 	}
