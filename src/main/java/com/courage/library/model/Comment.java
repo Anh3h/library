@@ -30,6 +30,14 @@ public class Comment {
 	public Comment() {
 	}
 
+	public Comment(String id, @NotNull User user, @NotNull Book book,
+			@NotNull String text) {
+		this.id = id;
+		this.user = user;
+		this.book = book;
+		this.text = text;
+	}
+
 	public Comment(@NotNull String text) {
 		this.text = text;
 		this.user = new User();
