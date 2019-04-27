@@ -36,24 +36,32 @@ public class BookDTO {
 	}
 
 	public BookDTO(String id, @NotNull String title, @NotNull String isbn,
-			@NotNull String author, String edition, String publisher, Date publicationDate,
-			@NotNull String topicId, String shelf, @NotNull Integer totalQty,
+			@NotNull String author, @NotNull String topicId, @NotNull Integer totalQty,
 			@NotNull Integer availableQty, @NotNull Integer upVotes,
 			@NotNull Integer downVotes, @NotNull Integer numOfBorrows) {
 		this.id = id;
 		this.title = title;
 		this.isbn = isbn;
 		this.author = author;
-		this.edition = edition;
-		this.publisher = publisher;
-		this.publicationDate = publicationDate;
 		this.topicId = topicId;
-		this.shelf = shelf;
 		this.totalQty = totalQty;
 		this.availableQty = availableQty;
 		this.upVotes = upVotes;
 		this.downVotes = downVotes;
 		this.numOfBorrows = numOfBorrows;
+	}
+
+	public BookDTO(String id, @NotNull String title, @NotNull String isbn,
+			@NotNull String author, String edition, String publisher, Date publicationDate,
+			@NotNull String topicId, String shelf, @NotNull Integer totalQty,
+			@NotNull Integer availableQty, @NotNull Integer upVotes,
+			@NotNull Integer downVotes, @NotNull Integer numOfBorrows) {
+		this(id, title, isbn, author, topicId, totalQty, availableQty, upVotes,
+				downVotes, numOfBorrows);
+		this.edition = edition;
+		this.publisher = publisher;
+		this.publicationDate = publicationDate;
+		this.shelf = shelf;
 	}
 
 	public String getId() {

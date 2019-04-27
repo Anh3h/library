@@ -72,22 +72,37 @@ public class Book {
 	public Book() {
 	}
 
-	public Book(@NotNull String title, @NotNull String isbn, @NotNull String author, String edition, String publisher,
-			Date publicationDate, String shelf, @NotNull Integer totalQty, @NotNull Integer availableQty,
-			@NotNull Integer upVotes, @NotNull Integer downVotes) {
+	public Book(@NotNull String title, @NotNull String isbn, @NotNull String author,
+			@NotNull Topic topic, @NotNull Integer totalQty,
+			@NotNull Integer availableQty, @NotNull Integer upVotes,
+			@NotNull Integer downVotes, @NotNull Integer numOfBorrows) {
 		this.title = title;
 		this.isbn = isbn;
 		this.author = author;
-		this.edition = edition;
-		this.publisher = publisher;
-		this.publicationDate = publicationDate;
-		this.topic = new Topic();
-		this.shelf = shelf;
+		this.topic = topic;
 		this.totalQty = totalQty;
 		this.availableQty = availableQty;
 		this.upVotes = upVotes;
 		this.downVotes = downVotes;
-		this.numOfBorrows = 0;
+		this.numOfBorrows = numOfBorrows;
+	}
+
+	public Book(@NotNull String title, @NotNull String isbn, @NotNull String author, String edition, String publisher,
+			Date publicationDate, String shelf, @NotNull Integer totalQty, @NotNull Integer availableQty,
+			@NotNull Integer upVotes, @NotNull Integer downVotes) {
+		this(title, isbn, author, new Topic(), totalQty, availableQty, upVotes, downVotes, 0);
+		this.edition = edition;
+		this.publisher = publisher;
+		this.publicationDate = publicationDate;
+		this.shelf = shelf;
+	}
+
+	public Book(String id, @NotNull String title, @NotNull String isbn,
+			@NotNull String author, @NotNull Topic topic, @NotNull Integer totalQty,
+			@NotNull Integer availableQty, @NotNull Integer upVotes,
+			@NotNull Integer downVotes, @NotNull Integer numOfBorrows) {
+		this(title, isbn, author, topic, totalQty, availableQty, upVotes, downVotes, numOfBorrows);
+		this.id = id;
 	}
 
 	public String getId() {

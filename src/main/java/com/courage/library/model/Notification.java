@@ -39,13 +39,18 @@ public class Notification {
 	}
 
 	public Notification(String id, @NotNull String action, @NotNull String content,
-			@NotNull Date createdAt, @NotNull Boolean done,
-			@NotNull User user, @NotNull Book book) {
+			@NotNull Date createdAt, @NotNull Boolean done) {
 		this.id = id;
 		this.action = action;
 		this.content = content;
 		this.createdAt = createdAt;
 		this.done = done;
+	}
+
+	public Notification(String id, @NotNull String action, @NotNull String content,
+			@NotNull Date createdAt, @NotNull Boolean done,
+			@NotNull User user, @NotNull Book book) {
+		this(id, action, content, createdAt, done);
 		this.user = user;
 		this.book = book;
 	}
