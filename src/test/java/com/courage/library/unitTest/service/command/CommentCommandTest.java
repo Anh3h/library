@@ -4,10 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.factory.CommentFactory;
+import com.courage.library.factory.NotificationFactory;
+import com.courage.library.factory.UserFactory;
 import com.courage.library.model.Comment;
 import com.courage.library.model.Notification;
+import com.courage.library.model.User;
 import com.courage.library.model.dto.CommentDTO;
 import com.courage.library.repository.BookRepository;
 import com.courage.library.repository.CommentRepository;
@@ -54,6 +60,23 @@ public class CommentCommandTest {
 		Comment comment = CommentFactory.instance();
 		CommentDTO commentDTO = CommentFactory.convertToDTO(comment);
 		given(this.commentRepository.save(any(Comment.class))).willReturn(comment);
+
+		Comment createdComment = this.commentCommand.createComment(commentDTO);
+
+		assertThat(createdComment).isEqualToComparingFieldByField(comment);
+
+	}
+
+	@Test
+	public void createCommentForFavoriteBook_returnsCreatedComment() {
+		Comment comment = CommentFactory.instance();
+		Notification notification = NotificationFactory.instance();
+		Set<User> bookFavUsers = new HashSet<>();
+		bookFavUsers.add(UserFactory.instance());
+		comment.getBook().setUsers(bookFavUsers);
+		CommentDTO commentDTO = CommentFactory.convertToDTO(comment);
+		given(this.commentRepository.save(any(Comment.class))).willReturn(comment);
+		given(this.notificationRepository.save(any(Notification.class))).willReturn(notification);
 
 		Comment createdComment = this.commentCommand.createComment(commentDTO);
 

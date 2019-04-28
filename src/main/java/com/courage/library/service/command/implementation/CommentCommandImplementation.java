@@ -1,6 +1,7 @@
 package com.courage.library.service.command.implementation;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import com.courage.library.exception.NotFoundException;
@@ -15,6 +16,7 @@ import com.courage.library.repository.NotificationRepository;
 import com.courage.library.repository.UserRepository;
 import com.courage.library.service.command.CommentCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +42,7 @@ public class CommentCommandImplementation implements CommentCommand {
 		Comment comment = new CommentMapper(this.userRepository, this.bookRepository).getComment(commentDTO);
 		comment.setId(UUID.randomUUID().toString());
 		Comment newComment = this.commentRepository.save(comment);
-		User user = newComment.getUser();
-		if (user.getFavoriteBooks().contains(newComment.getBook())) {
-			Notification notification = new Notification(UUID.randomUUID().toString(),
-					"New Comment", "A new comment about your favorite book as been added", new Date(), false,
-					comment.getUser(), comment.getBook());
-			this.notificationRepository.save(notification);
-		}
+		this.createNotification(newComment);
 		return newComment;
 	}
 
@@ -62,5 +58,16 @@ public class CommentCommandImplementation implements CommentCommand {
 	@Override
 	public void deleteComment(String commentId) {
 		this.commentRepository.deleteById(commentId);
+	}
+
+	@Async
+	protected void createNotification(Comment comment) {
+		String commentTxt = comment.getUser() + " wrote a review about " + comment.getBook();
+		comment.getBook().getUsers().forEach(user -> {
+			Notification notification = new Notification(UUID.randomUUID().toString(),
+					"New Comment", commentTxt, new Date(), false,
+					user, comment.getBook());
+			this.notificationRepository.save(notification);
+		});
 	}
 }
