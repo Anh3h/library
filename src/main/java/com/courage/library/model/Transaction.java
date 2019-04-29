@@ -54,6 +54,15 @@ public class Transaction {
 		this.checkInStatus = checkInStatus;
 	}
 
+	public Transaction(String id, @NotNull User user, @NotNull Book book,
+			@NotNull Date checkOut, @NotNull Date checkIn,
+			@NotNull Status checkOutStatus, @NotNull Status checkInStatus) {
+		this(checkOut, checkIn, checkOutStatus, checkInStatus);
+		this.id = id;
+		this.user = user;
+		this.book = book;
+	}
+
 	public String getId() {
 		return id;
 	}

@@ -1,5 +1,6 @@
 package com.courage.library.service.command.implementation;
 
+import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.PasswordDTO;
 import com.courage.library.repository.UserRepository;
@@ -27,6 +28,6 @@ public class AccountCommmandImplementation implements AccountCommand {
 			this.userRepository.save(user);
 			return user;
 		}
-		return null;
+		throw NotFoundException.create("User account with the provided email doesn't exist");
 	}
 }
