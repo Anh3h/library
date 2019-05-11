@@ -110,18 +110,18 @@ public class TopicControllerTest {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/topics?page=-1&size=5")
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isBadRequest());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
-	public void getTopic_returnsHttp200AndAnExistingTopic() throws Exception {
+	public void getExistingTopic_returnsHttp200AndAnExistingTopic() throws Exception {
 		Topic topic = TopicFactory.instance();
 		given(this.topicQuery.getTopicById(topic.getId()))
 				.willReturn(topic);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/topics/" + topic.getId())
 				.accept(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("name").value(topic.getName()));
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("name").value(topic.getName()));
 	}
 }
