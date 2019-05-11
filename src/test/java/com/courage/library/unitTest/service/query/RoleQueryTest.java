@@ -40,8 +40,7 @@ public class RoleQueryTest {
 
 	@Test
 	public void getRoles_returnsAPageofRoles() {
-		List<Role> roles = new ArrayList<>();
-		roles.add(RoleFactory.instance());
+		List<Role> roles = RoleFactory.instances();
 		given(this.roleRepository.findAll()).willReturn(roles);
 
 		List<Role> gottenRoles = this.roleQuery.getRoles();
