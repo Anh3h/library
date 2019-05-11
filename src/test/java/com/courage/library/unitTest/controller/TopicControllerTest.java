@@ -74,7 +74,7 @@ public class TopicControllerTest {
 				.content(JsonConverter.toJSON(topic))
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest());
+			.andExpect(status().isBadRequest());
 	}
 
 
