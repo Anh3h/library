@@ -43,9 +43,7 @@ public class TopicQueryTest {
 
 	@Test
 	public void getTopics_returnsAPageOfTopic() {
-		List<Topic> topics = new ArrayList<>();
-		topics.add(TopicFactory.instance());
-		Page<Topic> pagedTopics = new PageImpl<>(topics);
+		Page<Topic> pagedTopics = new PageImpl<>(TopicFactory.instances());
 		given(this.topicRepository.findAll(PageRequest.of(0, 2)))
 			.willReturn(pagedTopics);
 
