@@ -92,7 +92,7 @@ public class TopicControllerTest {
 	}
 
 	@Test
-	public void getTopicsRequestWithValidPageParams_returnsHttp200AndAListOfExistingTopics() throws Exception {
+	public void getTopicsRequestWithValidPageParams_returnsHttp200AndAPageOfExistingTopics() throws Exception {
 		Page<Topic> topics = new PageImpl<>( TopicFactory.instances() );
 		given(this.topicQuery.getTopics(1, 5))
 				.willReturn(topics);

@@ -1,11 +1,14 @@
 package com.courage.library.factory;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import com.courage.library.model.Role;
 import com.courage.library.model.User;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.data.domain.Page;
 
 public class UserFactory {
 
@@ -20,5 +23,13 @@ public class UserFactory {
 		Role role = RoleFactory.instance();
 		return new User(id, firstName, lastName, username, email, password, new Date(),
 				"", role);
+	}
+
+	public static List<User> instances() {
+		List<User> users = new ArrayList<>();
+		users.add(instance());
+		users.add(instance());
+		users.add(instance());
+		return users;
 	}
 }
