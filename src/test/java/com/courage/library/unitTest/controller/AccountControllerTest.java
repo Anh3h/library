@@ -5,6 +5,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.UUID;
+
 import com.courage.library.controller.AccountController;
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.NotificationFactory;
@@ -45,7 +47,7 @@ public class AccountControllerTest {
 	private TokenStore tokenStore;
 
 	@Test
-	public void getUsersNotificationsRequest_returnsAPageOfNotifications() throws Exception {
+	public void getUserNotificationsRequest_returnsHttp200AndAPageOfNotifications() throws Exception {
 		Page<Notification> notifications = new PageImpl<>( NotificationFactory.instances() );
 		String userId = notifications.getContent().get(0).getId();
 		notifications.getContent().forEach(notification -> notification.getUser().setId(userId));
@@ -59,9 +61,9 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void getUsersWithPageParamsNotificationsRequest_returnsAPageOfNotifications() throws Exception {
+	public void getUserNotificationsWithPageParamRequest_returnsHttp200AndAPageOfNotifications() throws Exception {
 		Page<Notification> notifications = new PageImpl<>( NotificationFactory.instances() );
-		String userId = notifications.getContent().get(0).getId();
+		String userId = notifications.getContent().get(0).getUser().getId();
 		notifications.getContent().forEach(notification -> notification.getUser().setId(userId));
 		given(this.notificationQuery.getNotifications(userId, 1, 2)).willReturn(notifications);
 
@@ -73,7 +75,7 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void getUsersUnReadNotificationsRequest_returnsAPageOfUnReadNotifications() throws Exception {
+	public void getUserUnReadNotificationsRequest_returnsHttp200AndAPageOfUnReadNotifications() throws Exception {
 		Page<Notification> notifications = new PageImpl<>( NotificationFactory.instances() );
 		String userId = notifications.getContent().get(0).getId();
 		notifications.getContent().forEach(notification -> notification.getUser().setId(userId));
@@ -82,12 +84,13 @@ public class AccountControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/" + userId + "/notifications?done=false")
 				.accept(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("content.[0].done").value(false))
 				.andExpect(jsonPath("content").isArray())
 				.andExpect(jsonPath("number").value(0));
 	}
 
 	@Test
-	public void updateUserRequest_returnsAnUpdatedNotification() throws Exception {
+	public void updateUserRequest_returnsHttp200AndAnUpdatedNotification() throws Exception {
 		Notification notification = NotificationFactory.instance();
 		given(this.notificationCommand.updateNotification(any(Notification.class))).willReturn(notification);
 
@@ -97,5 +100,17 @@ public class AccountControllerTest {
 				.content(JsonConverter.toJSON(notification)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("id").value(notification.getId()));
+	}
+
+	@Test
+	public void invalidUpdateUserRequest_returnsHttp400() throws Exception {
+		String notificationId = UUID.randomUUID().toString();
+		Notification notification = NotificationFactory.instance();
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/notifications/" + notificationId)
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(JsonConverter.toJSON(notification)))
+				.andExpect(status().isBadRequest());
 	}
 }
