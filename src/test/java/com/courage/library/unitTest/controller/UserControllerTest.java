@@ -51,4 +51,20 @@ public class UserControllerTest {
 			.andExpect(jsonPath("email").value(user.getEmail()));
 	}
 
+	@Test
+	public void updateUserRequest_returnsHttp200AndUpdatedUser() throws Exception {
+		User user = UserFactory.instance();
+		UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
+				user.getUsername(), user.getEmail(), user.getPassword(),
+				user.getDob(), user.getTelephone(), user.getRole().getId());
+		given(this.userCommand.updateUser(any(UserDTO.class))).willReturn(user);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/" + user.getId())
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(JsonConverter.toJSON(userDTO)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("email").value(user.getEmail()));
+	}
+
 }
