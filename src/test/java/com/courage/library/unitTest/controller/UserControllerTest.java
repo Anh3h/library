@@ -5,6 +5,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.UUID;
+
 import com.courage.library.controller.UserController;
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.UserFactory;
@@ -65,6 +67,22 @@ public class UserControllerTest {
 				.content(JsonConverter.toJSON(userDTO)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("email").value(user.getEmail()));
+	}
+
+	@Test
+	public void invalidUpdateUserRequest_returnsHttp400() throws Exception {
+		User user = UserFactory.instance();
+		String newId = UUID.randomUUID().toString();
+		UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
+				user.getUsername(), user.getEmail(), user.getPassword(),
+				user.getDob(), user.getTelephone(), user.getRole().getId());
+		given(this.userCommand.updateUser(any(UserDTO.class))).willReturn(user);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/" + newId)
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(JsonConverter.toJSON(userDTO)))
+				.andExpect(status().isBadRequest());
 	}
 
 }
