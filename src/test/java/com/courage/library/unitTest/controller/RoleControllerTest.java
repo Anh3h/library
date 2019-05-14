@@ -69,7 +69,6 @@ public class RoleControllerTest {
 	public void invalidUpdateRoleRequest_returnsHttp400() throws Exception {
 		Role role = RoleFactory.instance();
 		String id = UUID.randomUUID().toString();
-		given(this.roleCommand.updateRole(any(Role.class))).willReturn(role);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/roles/" + id)
 				.content(JsonConverter.toJSON(role))

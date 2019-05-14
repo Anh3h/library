@@ -78,7 +78,6 @@ public class UserControllerTest {
 		UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
 				user.getUsername(), user.getEmail(), user.getPassword(),
 				user.getDob(), user.getTelephone(), user.getRole().getId());
-		given(this.userCommand.updateUser(any(UserDTO.class))).willReturn(user);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/" + newId)
 				.accept(MediaType.APPLICATION_JSON_VALUE)

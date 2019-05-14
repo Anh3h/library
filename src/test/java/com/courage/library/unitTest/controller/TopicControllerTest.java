@@ -106,8 +106,6 @@ public class TopicControllerTest {
 
 	@Test
 	public void getTopicsRequestWithInValidPageParams_returnsHttp400() throws Exception {
-		Page<Topic> topics = new PageImpl<>( TopicFactory.instances() );
-
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/topics?page=-1&size=5")
 				.accept(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isBadRequest());
