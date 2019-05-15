@@ -42,9 +42,7 @@ public class UserControllerTest {
 	@Test
 	public void createUserRequest_returnsHttp201AndCreatedUser() throws Exception {
 		User user = UserFactory.instance();
-		UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
-				user.getUsername(), user.getEmail(), user.getPassword(),
-				user.getDob(), user.getTelephone(), user.getRole().getId());
+		UserDTO userDTO = UserFactory.convertToDTO(user);
 		given(this.userCommand.createUser(any(UserDTO.class))).willReturn(user);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users")
@@ -58,9 +56,7 @@ public class UserControllerTest {
 	@Test
 	public void updateUserRequest_returnsHttp200AndUpdatedUser() throws Exception {
 		User user = UserFactory.instance();
-		UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
-				user.getUsername(), user.getEmail(), user.getPassword(),
-				user.getDob(), user.getTelephone(), user.getRole().getId());
+		UserDTO userDTO = UserFactory.convertToDTO(user);
 		given(this.userCommand.updateUser(any(UserDTO.class))).willReturn(user);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/" + user.getId())
@@ -75,9 +71,7 @@ public class UserControllerTest {
 	public void invalidUpdateUserRequest_returnsHttp400() throws Exception {
 		User user = UserFactory.instance();
 		String newId = UUID.randomUUID().toString();
-		UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
-				user.getUsername(), user.getEmail(), user.getPassword(),
-				user.getDob(), user.getTelephone(), user.getRole().getId());
+		UserDTO userDTO = UserFactory.convertToDTO(user);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/" + newId)
 				.accept(MediaType.APPLICATION_JSON_VALUE)

@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.courage.library.model.Role;
 import com.courage.library.model.User;
+import com.courage.library.model.dto.UserDTO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 
@@ -31,5 +32,11 @@ public class UserFactory {
 		users.add(instance());
 		users.add(instance());
 		return users;
+	}
+
+	public static UserDTO convertToDTO(User user) {
+		return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
+				user.getUsername(), user.getEmail(), user.getPassword(),
+				user.getDob(), user.getTelephone(), user.getRole().getId());
 	}
 }
