@@ -19,6 +19,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -75,6 +77,51 @@ public class CommentControllerTest {
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(JsonConverter.toJSON(comment)))
-				.andExpect(status().isBadRequest());
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void getCommentsForABookRequest_returnsHttp200AndAPageOfComments() throws Exception {
+		Page<Comment> comments = new PageImpl<>(CommentFactory.instances());
+		String bookId = comments.getContent().get(0).getBook().getId();
+		comments.getContent().forEach(comment -> comment.getBook().setId(bookId));
+		given(this.commentQuery.findCommentsByBook(bookId, 1, 20)).willReturn(comments);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/comments?book=" + bookId)
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("content").isArray())
+			.andExpect(jsonPath("content.[0].book.id").value(bookId));
+	}
+
+	@Test
+	public void getCommentsRequest_returnsHttp200AndAPageOfComments() throws Exception {
+		Page<Comment> comments = new PageImpl<>(CommentFactory.instances());
+		given(this.commentQuery.getComments(1, 20)).willReturn(comments);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/comments")
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("content").isArray());
+	}
+
+	@Test
+	public void getCommentsForABookWithInvalidPageParamsRequest_returnsHttp400() throws Exception {
+		String bookId = UUID.randomUUID().toString();
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/comments?page=-1&size=2&book=" + bookId)
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void getCommentRequest_returnsHttp200AndExistingComment() throws Exception {
+		Comment comment = CommentFactory.instance();
+		given(this.commentQuery.getCommentById(comment.getId())).willReturn(comment);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/comments/" + comment.getId())
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").value(comment.getId()));
 	}
 }

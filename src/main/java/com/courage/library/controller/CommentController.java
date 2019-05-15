@@ -48,12 +48,12 @@ public class CommentController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<Page<Comment>> getComments(@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "book", required = false) String book) {
+			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "book", required = false) String bookId) {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
-		if (book != null) {
-			Page<Comment> comments = this.commentQuery.findCommentsByBook(book, page, size);
+		if (bookId != null) {
+			Page<Comment> comments = this.commentQuery.findCommentsByBook(bookId, page, size);
 			return new ResponseEntity<>(comments, HttpStatus.OK);
 		}
 		Page<Comment> comments = this.commentQuery.getComments(page, size);

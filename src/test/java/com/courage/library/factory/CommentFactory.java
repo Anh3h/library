@@ -1,5 +1,7 @@
 package com.courage.library.factory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.courage.library.model.Book;
@@ -21,5 +23,13 @@ public class CommentFactory {
 	public static CommentDTO convertToDTO(Comment comment) {
 		return new CommentDTO(comment.getId(), comment.getUser().getId(),
 				comment.getBook().getId(), comment.getText());
+	}
+
+	public static List instances() {
+		List<Comment> comments = new ArrayList<>();
+		comments.add(instance());
+		comments.add(instance());
+		comments.add(instance());
+		return comments;
 	}
 }
