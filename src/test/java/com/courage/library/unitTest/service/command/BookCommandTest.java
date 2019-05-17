@@ -54,10 +54,7 @@ public class BookCommandTest {
 	@Test
 	public void createBook_returnsCreatedBook() {
 		Book book = BookFactory.instance();
-		BookDTO bookDTO = new BookDTO(book.getId(), book.getTitle(), book.getIsbn(),
-				book.getAuthor(), book.getTopic().getId(), book.getTotalQty(),
-				book.getAvailableQty(), book.getUpVotes(), book.getDownVotes(),
-				book.getNumOfBorrows());
+		BookDTO bookDTO = BookFactory.convertToDTO(book);
 		given(bookRepository.save(any(Book.class))).willReturn(book);
 		given(bookRepository.findByIsbn(book.getIsbn())).willReturn(null);
 
