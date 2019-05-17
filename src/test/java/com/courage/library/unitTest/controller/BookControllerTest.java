@@ -5,6 +5,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.UUID;
+
 import com.courage.library.controller.BookController;
 import com.courage.library.factory.BookFactory;
 import com.courage.library.factory.JsonConverter;
@@ -48,6 +50,38 @@ public class BookControllerTest {
 				.content(JsonConverter.toJSON(bookDTO)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("title").value(book.getTitle()));
+
+	}
+
+	@Test
+	public void updateBookRequest_returnsHttp200AndUpdatedBook() throws Exception {
+
+		Book book = BookFactory.instance();
+		BookDTO bookDTO = BookFactory.convertToDTO(book);
+		given(this.bookCommand.updateBook(any(BookDTO.class))).willReturn(book);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/books/" + book.getId())
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(JsonConverter.toJSON(bookDTO)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("title").value(book.getTitle()));
+
+	}
+
+	@Test
+	public void invalidUpdateBookRequest_returnsHttp400() throws Exception {
+
+		Book book = BookFactory.instance();
+		BookDTO bookDTO = BookFactory.convertToDTO(book);
+		String bookId = UUID.randomUUID().toString();
+		given(this.bookCommand.updateBook(any(BookDTO.class))).willReturn(book);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/books/" + bookId)
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(JsonConverter.toJSON(bookDTO)))
+				.andExpect(status().isBadRequest());
 
 	}
 
