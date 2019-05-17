@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.courage.library.model.Book;
 import com.courage.library.model.Topic;
+import com.courage.library.model.dto.BookDTO;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class BookFactory {
@@ -26,5 +27,12 @@ public class BookFactory {
 		book.setUsers(new HashSet<>());
 
 		return book;
+	}
+
+	public static BookDTO convertToDTO(Book book) {
+		return new BookDTO(book.getId(), book.getTitle(), book.getIsbn(),
+				book.getAuthor(), book.getTopic().getId(), book.getTotalQty(),
+				book.getAvailableQty(), book.getUpVotes(), book.getDownVotes(),
+				book.getNumOfBorrows());
 	}
 }
