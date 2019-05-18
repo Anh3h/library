@@ -49,6 +49,19 @@ public class TransactionControllerTest {
 	}
 
 	@Test
+	public void updateTransactionRequest_returnsHttp200AndUpdatedTransaction() throws Exception {
+		Transaction transaction = TransactionFactory.instance();
+		TransactionDTO transactionDTO = TransactionFactory.convertToDTO(transaction);
+		given(this.transactionCommand.updateTransaction(any(TransactionDTO.class))).willReturn(transaction);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/transactions/" + transaction.getId())
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(JsonConverter.toJSON(transactionDTO)))
+				.andExpect(status().isOk());
+	}
+
+	@Test
 	public void getTransactionRequest_returnsHttp200AndExistingTransaction() throws Exception {
 		Transaction transaction = TransactionFactory.instance();
 		given(this.transactionQuery.getTransactionById(transaction.getId())).willReturn(transaction);
