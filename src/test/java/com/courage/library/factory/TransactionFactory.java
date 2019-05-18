@@ -9,6 +9,7 @@ import com.courage.library.model.Book;
 import com.courage.library.model.Status;
 import com.courage.library.model.Transaction;
 import com.courage.library.model.User;
+import com.courage.library.model.dto.TransactionDTO;
 import org.springframework.data.domain.Page;
 
 public class TransactionFactory {
@@ -33,5 +34,9 @@ public class TransactionFactory {
 
 		transactions.forEach(transaction -> transaction.setUser(user));
 		return transactions;
+	}
+
+	public static TransactionDTO convertToDTO(Transaction transaction) {
+		return new TransactionDTO();
 	}
 }
