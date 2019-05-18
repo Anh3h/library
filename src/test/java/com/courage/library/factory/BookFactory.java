@@ -1,6 +1,8 @@
 package com.courage.library.factory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -34,5 +36,13 @@ public class BookFactory {
 				book.getAuthor(), book.getTopic().getId(), book.getTotalQty(),
 				book.getAvailableQty(), book.getUpVotes(), book.getDownVotes(),
 				book.getNumOfBorrows());
+	}
+
+	public static List<Book> instances() {
+		List<Book> books = new ArrayList<>();
+		books.add(instance());
+		books.add(instance());
+		books.add(instance());
+		return books;
 	}
 }
