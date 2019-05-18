@@ -1,8 +1,11 @@
 package com.courage.library.unitTest.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.courage.library.controller.TransactionController;
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TransactionFactory;
 import com.courage.library.model.Transaction;
@@ -21,7 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = TransactionController.class, secure = false)
-public class TransactionController {
+public class TransactionControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -33,16 +36,27 @@ public class TransactionController {
 	private TransactionQuery transactionQuery;
 
 	@Test
-	private void createTransactionRequest_returnsCreatedTransaction() throws Exception {
+	public void createTransactionRequest_returnsHttp201AndCreatedTransaction() throws Exception {
 		Transaction transaction = TransactionFactory.instance();
 		TransactionDTO transactionDTO = TransactionFactory.convertToDTO(transaction);
-		given(this.transactionCommand.createTransaction(transactionDTO)).willReturn(transaction);
+		given(this.transactionCommand.createTransaction(any(TransactionDTO.class))).willReturn(transaction);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/transactions")
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(JsonConverter.toJSON(transactionDTO)))
 			.andExpect(status().isCreated());
+	}
+
+	@Test
+	public void getTransactionRequest_returnsHttp200AndExistingTransaction() throws Exception {
+		Transaction transaction = TransactionFactory.instance();
+		given(this.transactionQuery.getTransactionById(transaction.getId())).willReturn(transaction);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions/" + transaction.getId())
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").value(transaction.getId()));
 	}
 
 }
