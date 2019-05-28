@@ -10,6 +10,7 @@ import java.util.UUID;
 import com.courage.library.controller.TransactionController;
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TransactionFactory;
+import com.courage.library.factory.UserFactory;
 import com.courage.library.model.Transaction;
 import com.courage.library.model.dto.TransactionDTO;
 import com.courage.library.service.command.TransactionCommand;
@@ -19,6 +20,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -84,6 +87,36 @@ public class TransactionControllerTest {
 				.accept(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("id").value(transaction.getId()));
+	}
+
+	@Test
+	public void getTransactionsRequest_returnsHttp200AndAPageOfTransactions() throws Exception {
+		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstances(UserFactory.instance()));
+		given(this.transactionQuery.getTransactions(1, 20)).willReturn(transactions);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions")
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("content").isArray());
+	}
+
+	@Test
+	public void getTransactionsRequestWithValidPageParams_returnsHttp200AndAPageOfTransactions() throws Exception {
+		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstances(UserFactory.instance()));
+		given(this.transactionQuery.getTransactions(1, 4)).willReturn(transactions);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions?page=1&size=4")
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("content").isArray())
+				.andExpect(jsonPath("size").value(0));
+	}
+
+	@Test
+	public void getTransactionsRequestWithInValidPageParams_returnsHttp400() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions?page=-1&size=4")
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isBadRequest());
 	}
 
 }
