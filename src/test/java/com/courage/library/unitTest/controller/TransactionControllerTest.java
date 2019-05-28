@@ -5,6 +5,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.UUID;
+
 import com.courage.library.controller.TransactionController;
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TransactionFactory;
@@ -59,6 +61,18 @@ public class TransactionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(JsonConverter.toJSON(transactionDTO)))
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void invalidUpdateTransactionRequest_returnsHttp400() throws Exception {
+		TransactionDTO transactionDTO = TransactionFactory.convertToDTO(TransactionFactory.instance());
+		String transId = UUID.randomUUID().toString();
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/transactions/" + transId)
+				.accept(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(JsonConverter.toJSON(transactionDTO)))
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test

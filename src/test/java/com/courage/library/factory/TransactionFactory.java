@@ -37,6 +37,8 @@ public class TransactionFactory {
 	}
 
 	public static TransactionDTO convertToDTO(Transaction transaction) {
-		return new TransactionDTO();
+		return new TransactionDTO(transaction.getId(), transaction.getUser().getId(),
+				transaction.getBook().getId(), transaction.getCheckOut(), transaction.getCheckIn()
+				, transaction.getCheckOutStatus(), transaction.getCheckInStatus());
 	}
 }
