@@ -67,7 +67,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 		clients
 				.inMemory()
 				.withClient(clientId)
-				.secret(clientSecret)
+				.secret("{noop}" + clientSecret)
 				.authorizedGrantTypes("client_credentials", "password", "refresh_token")
 				.authorities("ROLE_TRUSTED_CLIENT")
 				.scopes("read", "write")
