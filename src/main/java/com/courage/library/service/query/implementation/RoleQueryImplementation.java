@@ -1,6 +1,7 @@
 package com.courage.library.service.query.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Role;
@@ -19,11 +20,11 @@ public class RoleQueryImplementation implements RoleQuery {
 
 	@Override
 	public Role getRoleById(String roleId) {
-		Role role = this.roleRepository.getOne(roleId);
-		if (role == null) {
+		Optional<Role> role = this.roleRepository.findById(roleId);
+		if (!role.isPresent()) {
 			throw NotFoundException.create("Not Found: Role does not exist");
 		}
-		return role;
+		return role.get();
 	}
 
 	@Override
