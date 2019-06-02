@@ -49,11 +49,7 @@ public class RoleTest {
 
 	@Test
 	public void testCreateRole() {
-		Role role = RoleFactory.instance();
-		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(role), httpHeaders);
-
-		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.POST,
-				entity, String.class);
+		ResponseEntity<String> response = this.createRole();
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
 	}
