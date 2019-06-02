@@ -77,7 +77,21 @@ public class RoleTest {
 
 	}
 
-	/*@Test
+	@Test
+	public void testInValidUpdateRole() {
+		Role role = RoleFactory.instance();
+		String roleId = UUID.randomUUID().toString();
+		String url = baseUrl + "/" + roleId;
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(role), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
+
+	}
+
+	@Test
 	public void testGetExistingRole() {
 		Role role = RoleFactory.instance();
 		ResponseEntity<String> createRoleResponse = this.createRole(role);
@@ -103,6 +117,6 @@ public class RoleTest {
 				entity, String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
-	}*/
+	}
 
 }
