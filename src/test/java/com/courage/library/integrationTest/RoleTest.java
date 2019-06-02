@@ -92,6 +92,19 @@ public class RoleTest {
 	}
 
 	@Test
+	public void testGetRoles() {
+		RoleFactory.instances().forEach(role -> this.createRole((Role) role));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read("$").toString())
+				.contains("[");
+	}
+
+	@Test
 	public void testGetExistingRole() {
 		Role role = RoleFactory.instance();
 		ResponseEntity<String> createRoleResponse = this.createRole(role);
