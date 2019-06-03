@@ -44,7 +44,7 @@ public class TopicTest {
 		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
 	}
 
-	@Test
+	/*@Test
 	public void testCreateTopic() {
 		Topic topic = TopicFactory.instance();
 
@@ -75,8 +75,51 @@ public class TopicTest {
 		String url = baseUrl + "/" + topic.getId();
 		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(topic), httpHeaders);
 
-		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, entity,
+				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}*/
+/*
+	@Test
+	public void testGetTopics() {
+		TopicFactory.instances().forEach(topic -> createTopic(topic));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(new Integer(JsonPath.parse(response.getBody()).read(".totalElements").toString()))
+			.isGreaterThan(3);
+	}*/
+
+	@Test
+	public void testGetTopicsWithParam() {
+		TopicFactory.instances().forEach(topic -> createTopic(topic));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=2&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		System.out.println(JsonPath.parse(response.getBody()).read(".size").toString());
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read(".size").toString())
+				.isEqualTo("[3]");
 	}
+
+	/*@Test
+	public void testGetTopic() {
+		Topic topic = TopicFactory.instance();
+		ResponseEntity<String> createTopicResponse = this.createTopic(topic);
+		String topicId = JsonPath.parse(createTopicResponse.getBody()).read("id").toString();
+		String url = baseUrl + "/" + topicId;
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+	}*/
 }
