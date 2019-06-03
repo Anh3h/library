@@ -44,7 +44,7 @@ public class TopicTest {
 		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
 	}
 
-	/*@Test
+	@Test
 	public void testCreateTopic() {
 		Topic topic = TopicFactory.instance();
 
@@ -79,8 +79,8 @@ public class TopicTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
-	}*/
-/*
+	}
+
 	@Test
 	public void testGetTopics() {
 		TopicFactory.instances().forEach(topic -> createTopic(topic));
@@ -92,7 +92,7 @@ public class TopicTest {
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(new Integer(JsonPath.parse(response.getBody()).read(".totalElements").toString()))
 			.isGreaterThan(3);
-	}*/
+	}
 
 	@Test
 	public void testGetTopicsWithPageParam() {
@@ -108,7 +108,18 @@ public class TopicTest {
 				.isEqualTo("[3]");
 	}
 
-	/*@Test
+	@Test
+	public void testGetTopicsWithInValidPageParam() {
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=-2&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
+	}
+
+	@Test
 	public void testGetTopic() {
 		Topic topic = TopicFactory.instance();
 		ResponseEntity<String> createTopicResponse = this.createTopic(topic);
@@ -120,5 +131,6 @@ public class TopicTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
-	}*/
+		assertThat(JsonPath.parse(response.getBody()).read("name").toString()).isEqualTo(topic.getName());
+	}
 }
