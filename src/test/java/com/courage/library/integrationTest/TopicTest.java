@@ -95,7 +95,7 @@ public class TopicTest {
 	}*/
 
 	@Test
-	public void testGetTopicsWithParam() {
+	public void testGetTopicsWithPageParam() {
 		TopicFactory.instances().forEach(topic -> createTopic(topic));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 		String url = baseUrl + "?page=2&size=3";
@@ -103,7 +103,6 @@ public class TopicTest {
 		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
 				String.class);
 
-		System.out.println(JsonPath.parse(response.getBody()).read(".size").toString());
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read(".size").toString())
 				.isEqualTo("[3]");
