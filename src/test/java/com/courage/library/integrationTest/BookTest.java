@@ -8,6 +8,7 @@ import com.courage.library.factory.TopicFactory;
 import com.courage.library.model.Book;
 import com.courage.library.model.Topic;
 import com.courage.library.model.dto.BookDTO;
+import com.google.api.client.json.Json;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,18 +49,40 @@ public class BookTest {
 		return this.restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 	}
 
-	@Test
-	public void testCreateBook() {
-		Book book = BookFactory.instance();
-		String topicId = JsonPath.parse(this.createTopic(book.getTopic()).getBody()).read("id").toString();
+	private ResponseEntity<String> createBook(Book book) {
+		String topicId = JsonPath.parse(this.createTopic(book.getTopic()).getBody())
+				.read("id").toString();
 		book.getTopic().setId(topicId);
 		BookDTO bookDTO = BookFactory.convertToDTO(book);
 		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(bookDTO), httpHeaders);
 
-		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.POST,
-				entity, String.class);
+		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
+	}
+
+	@Test
+	public void testCreateBook() {
+		Book book = BookFactory.instance();
+
+		ResponseEntity<String> response = this.createBook(book);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
+		assertThat(JsonPath.parse(response.getBody()).read("title").toString())
+				.isEqualTo(book.getTitle());
+	}
+
+	@Test
+	public void testUpdateBook() {
+		Book book = BookFactory.instance();
+		ResponseEntity<String> createBookResponse = this.createBook(book);
+		book.setId(JsonPath.parse(createBookResponse.getBody()).read("id").toString());
+		String url = baseUrl + "/" + book.getId();
+		BookDTO bookDTO = BookFactory.convertToDTO(book);
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(bookDTO), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read("title").toString())
 				.isEqualTo(book.getTitle());
 	}
