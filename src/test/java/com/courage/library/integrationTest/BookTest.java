@@ -116,4 +116,30 @@ public class BookTest {
 		assertThat(new Integer(numberOfElts.substring(1, numberOfElts.length()-1)))
 			.isGreaterThan(3);
 	}
+
+	@Test
+	public void testGetBooksWithPageParams() {
+		BookFactory.instances().forEach(book -> this.createBook(book));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=1&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read(".size").toString())
+			.isEqualTo("[3]");
+	}
+
+	@Test
+	public void testGetBooksWithInValidPageParams() {
+		BookFactory.instances().forEach(book -> this.createBook(book));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=0&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
+	}
 }
