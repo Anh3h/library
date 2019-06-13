@@ -87,4 +87,30 @@ public class BookTest {
 				.isEqualTo(book.getTitle());
 	}
 
+	@Test
+	public void testGetBook() {
+		Book book = BookFactory.instance();
+		ResponseEntity<String> createBookResponse = this.createBook(book);
+		book.setId(JsonPath.parse(createBookResponse.getBody()).read("id").toString());
+		String url = baseUrl + "/" + book.getId();
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read("title").toString())
+				.isEqualTo(book.getTitle());
+	}
+
+	@Test
+	public void testGetBooks() {
+		BookFactory.instances().forEach(book -> this.createBook(book));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+	}
 }
