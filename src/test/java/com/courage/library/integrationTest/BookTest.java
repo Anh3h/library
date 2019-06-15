@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class BookTest {
 
 	@LocalServerPort
-	private String port;
+	private Integer port;
 	private String baseUrl = "http://localhost:";
 	private TestRestTemplate restTemplate = new TestRestTemplate();
 	private HttpHeaders httpHeaders = new HttpHeaders();
@@ -38,32 +38,15 @@ public class BookTest {
 	public void before() {
 		baseUrl += port;
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-		httpHeaders.set("Authorization", "Bearer" + Authenticate.getAccessToken(baseUrl));
+		httpHeaders.set("Authorization", "Bearer " + Authenticate.getAccessToken(baseUrl));
 		baseUrl += "/api/v1/books";
-	}
-
-	private ResponseEntity<String> createTopic(Topic topic) {
-		String url = "http://localhost:" + port + "/api/v1/topics";
-		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(topic), httpHeaders);
-
-		return this.restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-	}
-
-	private ResponseEntity<String> createBook(Book book) {
-		String topicId = JsonPath.parse(this.createTopic(book.getTopic()).getBody())
-				.read("id").toString();
-		book.getTopic().setId(topicId);
-		BookDTO bookDTO = BookFactory.convertToDTO(book);
-		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(bookDTO), httpHeaders);
-
-		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
 	}
 
 	@Test
 	public void testCreateBook() {
 		Book book = BookFactory.instance();
 
-		ResponseEntity<String> response = this.createBook(book);
+		ResponseEntity<String> response = Helper.createBook(port, book);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
 		assertThat(JsonPath.parse(response.getBody()).read("title").toString())
@@ -73,7 +56,7 @@ public class BookTest {
 	@Test
 	public void testUpdateBook() {
 		Book book = BookFactory.instance();
-		ResponseEntity<String> createBookResponse = this.createBook(book);
+		ResponseEntity<String> createBookResponse = Helper.createBook(port, book);
 		book.setId(JsonPath.parse(createBookResponse.getBody()).read("id").toString());
 		String url = baseUrl + "/" + book.getId();
 		BookDTO bookDTO = BookFactory.convertToDTO(book);
@@ -90,7 +73,7 @@ public class BookTest {
 	@Test
 	public void testGetBook() {
 		Book book = BookFactory.instance();
-		ResponseEntity<String> createBookResponse = this.createBook(book);
+		ResponseEntity<String> createBookResponse = Helper.createBook(port, book);
 		book.setId(JsonPath.parse(createBookResponse.getBody()).read("id").toString());
 		String url = baseUrl + "/" + book.getId();
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
@@ -105,7 +88,7 @@ public class BookTest {
 
 	@Test
 	public void testGetBooks() {
-		BookFactory.instances().forEach(book -> this.createBook(book));
+		BookFactory.instances().forEach(book -> Helper.createBook(port, book));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 
 		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET,
@@ -118,8 +101,8 @@ public class BookTest {
 	}
 
 	@Test
-	public void testGetBooksWithPageParams() {
-		BookFactory.instances().forEach(book -> this.createBook(book));
+	public void testGetBooksWithValidPageParams() {
+		BookFactory.instances().forEach(book -> Helper.createBook(port, book));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 		String url = baseUrl + "?page=1&size=3";
 
@@ -133,7 +116,7 @@ public class BookTest {
 
 	@Test
 	public void testGetBooksWithInValidPageParams() {
-		BookFactory.instances().forEach(book -> this.createBook(book));
+		BookFactory.instances().forEach(book -> Helper.createBook(port, book));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 		String url = baseUrl + "?page=0&size=3";
 
