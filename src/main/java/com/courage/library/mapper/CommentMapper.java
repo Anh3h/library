@@ -20,8 +20,9 @@ public class CommentMapper {
 		Comment comment = new Comment(commentDTO.getText());
 		if (commentDTO.getId() != null)
 			comment.setId(commentDTO.getId());
-		comment.setBook(bookRepository.getOne(commentDTO.getBookId()));
-		comment.setUser(userRepository.getOne(commentDTO.getUserId()));
+
+		comment.setBook(bookRepository.findById(commentDTO.getBookId()).get());
+		comment.setUser(userRepository.findById(commentDTO.getUserId()).get());
 		return comment;
 	}
 

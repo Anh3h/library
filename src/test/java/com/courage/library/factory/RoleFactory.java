@@ -17,7 +17,7 @@ public class RoleFactory {
 		return new Role(id, name);
 	}
 
-	public static List instances() {
+	public static List<Role> instances() {
 		List<Role> roles = new ArrayList<Role>();
 		roles.add(instance());
 		roles.add(instance());

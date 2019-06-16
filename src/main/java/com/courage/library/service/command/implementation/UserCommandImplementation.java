@@ -40,7 +40,6 @@ public class UserCommandImplementation implements UserCommand {
 			user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 			return this.userRepository.save(user);
 		}
-		System.out.println("Throwing error");
 		throw ConflictException.create("Conflict: Email already exist");
 	}
 

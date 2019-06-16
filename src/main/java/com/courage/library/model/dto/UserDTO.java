@@ -19,7 +19,7 @@ public class UserDTO {
 	@NotNull
 	private String email;
 	@NotNull
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String password;
 	private Date dob;
 	private String telephone;

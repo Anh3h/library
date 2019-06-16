@@ -80,6 +80,7 @@ public class User {
 			@NotNull String email, @NotNull String password, Date dob, String telephone,
 			@NotNull Role role) {
 		this(firstName, lastName, email, username, dob, telephone);
+		this.password = password;
 		this.id = id;
 		this.role = role;
 	}
