@@ -42,16 +42,10 @@ public class RoleTest {
 		baseUrl += "/api/v1/roles";
 	}
 
-	private ResponseEntity<String> createRole(Role role) {
-		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(role), httpHeaders);
-
-		 return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
-	}
-
 	@Test
 	public void testCreateRole() {
 		Role role = RoleFactory.instance();
-		ResponseEntity<String> response = this.createRole(role);
+		ResponseEntity<String> response = Helper.createRole(port, role);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
 		assertThat(JsonPath.parse(response.getBody()).read("name")
@@ -61,7 +55,7 @@ public class RoleTest {
 	@Test
 	public void testUpdateRole() {
 		Role role = RoleFactory.instance();
-		ResponseEntity<String> createRoleResponse = this.createRole(role);
+		ResponseEntity<String> createRoleResponse = Helper.createRole(port, role);
 		String roleId = JsonPath.parse(createRoleResponse.getBody()).read("id");
 		String url = baseUrl + "/" + roleId;
 		role.setName(RandomStringUtils.random(10, true, true));
@@ -93,7 +87,7 @@ public class RoleTest {
 
 	@Test
 	public void testGetRoles() {
-		RoleFactory.instances().forEach(role -> this.createRole((Role) role));
+		RoleFactory.instances().forEach(role -> Helper.createRole(port, role));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 
 		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET,
@@ -107,7 +101,7 @@ public class RoleTest {
 	@Test
 	public void testGetExistingRole() {
 		Role role = RoleFactory.instance();
-		ResponseEntity<String> createRoleResponse = this.createRole(role);
+		ResponseEntity<String> createRoleResponse = Helper.createRole(port, role);
 		String roleId = JsonPath.parse(createRoleResponse.getBody()).read("id");
 		String url = baseUrl + "/" + roleId;
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
