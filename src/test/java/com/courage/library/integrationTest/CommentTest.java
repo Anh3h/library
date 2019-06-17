@@ -74,10 +74,10 @@ public class CommentTest {
 	@Test
 	public void testUpdateComment() {
 		Comment comment = CommentFactory.instance();
-		ResponseEntity<String> commentRes = this.createComment(comment);
-		comment.setId(JsonPath.parse(commentRes.getBody()).read("id").toString());
-		comment.getUser().setId(JsonPath.parse(commentRes.getBody()).read("user.id").toString());
-		comment.getBook().setId(JsonPath.parse(commentRes.getBody()).read("book.id").toString());
+		ResponseEntity<String> createCommentRes = this.createComment(comment);
+		comment.setId(JsonPath.parse(createCommentRes.getBody()).read("id").toString());
+		comment.getUser().setId(JsonPath.parse(createCommentRes.getBody()).read("user.id").toString());
+		comment.getBook().setId(JsonPath.parse(createCommentRes.getBody()).read("book.id").toString());
 		CommentDTO commentDTO = CommentFactory.convertToDTO(comment);
 		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(commentDTO), httpHeaders);
 		String url = baseUrl + "/" + comment.getId();
@@ -116,5 +116,25 @@ public class CommentTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	public void testGetComment() {
+		Comment comment = CommentFactory.instance();
+		ResponseEntity<String> createCommentRes = this.createComment(comment);
+		HttpEntity<String> entity = new HttpEntity(null, httpHeaders);
+		String commentId = JsonPath.parse(createCommentRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + commentId;
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read("text").toString())
+				.isEqualTo(comment.getText());
+		assertThat(JsonPath.parse(response.getBody()).read("user.id").toString())
+				.isEqualTo(comment.getUser().getId());
+		assertThat(JsonPath.parse(response.getBody()).read("book.id").toString())
+				.isEqualTo(comment.getBook().getId());
 	}
 }
