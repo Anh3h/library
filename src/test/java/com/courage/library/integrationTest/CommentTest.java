@@ -137,4 +137,43 @@ public class CommentTest {
 		assertThat(JsonPath.parse(response.getBody()).read("book.id").toString())
 				.isEqualTo(comment.getBook().getId());
 	}
+
+	@Test
+	public void testGetComments() {
+		CommentFactory.instances().forEach(commment -> this.createComment(commment));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET, entity,
+				String.class);
+		String numberOfElts = JsonPath.parse(response.getBody()).read(".numberOfElements").toString();
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(new Integer(new Integer(numberOfElts.substring(1, numberOfElts.length()-1))))
+				.isGreaterThan(3);
+	}
+
+	@Test
+	public void testGetCommentsWithValidPageParams() {
+		CommentFactory.instances().forEach(commment -> this.createComment(commment));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=1&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read(".size").toString())
+				.isEqualTo("[3]");
+	}
+
+	@Test
+	public void testGetCommentsWithInValidPageParams() {
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=-1&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
+	}
 }

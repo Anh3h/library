@@ -25,7 +25,7 @@ public class CommentFactory {
 				comment.getBook().getId(), comment.getText());
 	}
 
-	public static List instances() {
+	public static List<Comment> instances() {
 		List<Comment> comments = new ArrayList<>();
 		comments.add(instance());
 		comments.add(instance());
