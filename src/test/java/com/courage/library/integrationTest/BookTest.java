@@ -2,6 +2,8 @@ package com.courage.library.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.UUID;
+
 import com.courage.library.factory.BookFactory;
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TopicFactory;
@@ -68,6 +70,19 @@ public class BookTest {
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read("title").toString())
 				.isEqualTo(book.getTitle());
+	}
+
+	@Test
+	public void testInValidUpdateBook() {
+		Book book = BookFactory.instance();
+		String url = baseUrl + "/" + UUID.randomUUID();
+		BookDTO bookDTO = BookFactory.convertToDTO(book);
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(bookDTO), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
 	}
 
 	@Test
