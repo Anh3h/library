@@ -43,7 +43,6 @@ public class BookTest {
 		httpHeaders.set("Authorization", "Bearer " + Authenticate.getAccessToken(baseUrl));
 		baseUrl += "/api/v1/books";
 	}
-
 	@Test
 	public void testCreateBook() {
 		Book book = BookFactory.instance();
@@ -70,6 +69,19 @@ public class BookTest {
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read("title").toString())
 				.isEqualTo(book.getTitle());
+	}
+
+	@Test
+	public void testUpdateNonExistingBook() {
+		Book book = BookFactory.instance();
+		String url = baseUrl + "/" + book.getId();
+		BookDTO bookDTO = BookFactory.convertToDTO(book);
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(bookDTO), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
 	}
 
 	@Test
