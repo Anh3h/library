@@ -28,11 +28,11 @@ public class UserMapper {
 			user.setId(userDTO.getId());
 		if(userDTO.getPassword() != null)
 			user.setPassword(user.getPassword());
-		user.setRole(roleRepository.getOne(userDTO.getRoleId()));
+		user.setRole(roleRepository.findById(userDTO.getRoleId()).get());
 		Set<Book> books = new HashSet<>();
 		if (userDTO.getFavoriteBookIds() != null) {
 			userDTO.getFavoriteBookIds().forEach(bookId -> {
-				books.add(this.bookRepository.getOne(bookId));
+				books.add(this.bookRepository.findById(bookId).get());
 			});
 		}
 		user.setFavoriteBooks(books);

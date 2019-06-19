@@ -8,6 +8,7 @@ import com.courage.library.factory.UserFactory;
 import com.courage.library.model.Topic;
 import com.courage.library.model.User;
 import com.jayway.jsonpath.JsonPath;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class UserTest {
 		baseUrl += port;
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		httpHeaders.set("Authorization", "Bearer " + Authenticate.getAccessToken(baseUrl));
-		baseUrl += "/api/v1/topics";
+		baseUrl += "/api/v1/users";
 	}
 
 	private ResponseEntity<String> createUser(User user) {
@@ -53,6 +54,23 @@ public class UserTest {
 		ResponseEntity<String> response = Helper.createUser(port, user);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
+		assertThat(JsonPath.parse(response.getBody()).read("email").toString()).isEqualTo(user.getEmail());
+	}
+
+	@Test
+	public void testUpdateUser() {
+		User user = UserFactory.instance();
+		ResponseEntity<String> createUserRes = Helper.createUser(port, user);
+		String userId = JsonPath.parse(createUserRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + userId;
+		user.setId(userId);
+		user.setFirstName(RandomStringUtils.random(10, true, false));
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(UserFactory.convertToDTO(user)), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read("email").toString()).isEqualTo(user.getEmail());
 	}
 
