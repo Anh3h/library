@@ -2,6 +2,8 @@ package com.courage.library.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.UUID;
+
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TopicFactory;
 import com.courage.library.model.Topic;
@@ -70,7 +72,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testInValidUpdateTopic() {
+	public void testUpdateNonExistingTopic() {
 		Topic topic = TopicFactory.instance();
 		String url = baseUrl + "/" + topic.getId();
 		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(topic), httpHeaders);
@@ -79,6 +81,18 @@ public class TopicTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	public void testInValidUpdateTopic() {
+		Topic topic = TopicFactory.instance();
+		String url = baseUrl + "/" + UUID.randomUUID().toString();
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(topic), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
 	}
 
 	@Test
