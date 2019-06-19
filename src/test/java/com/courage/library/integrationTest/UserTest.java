@@ -1,4 +1,3 @@
-/*
 package com.courage.library.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UsersTest {
+public class UserTest {
 
 	@LocalServerPort
 	private Integer port;
@@ -51,11 +50,10 @@ public class UsersTest {
 	public void testCreateUser() {
 		User user = UserFactory.instance();
 
-		ResponseEntity<String> response = this.createUser(user);
+		ResponseEntity<String> response = Helper.createUser(port, user);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
 		assertThat(JsonPath.parse(response.getBody()).read("email").toString()).isEqualTo(user.getEmail());
 	}
 
 }
-*/
