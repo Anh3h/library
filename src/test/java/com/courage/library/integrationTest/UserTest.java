@@ -89,4 +89,16 @@ public class UserTest {
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
 	}
 
+	@Test
+	public void testUpdateNonExistingUser() {
+		User user = UserFactory.instance();
+		String url = baseUrl + "/" + user.getId();
+		user.setFirstName(RandomStringUtils.random(10, true, false));
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(UserFactory.convertToDTO(user)), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}
 }

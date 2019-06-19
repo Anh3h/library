@@ -45,8 +45,8 @@ public class UserCommandImplementation implements UserCommand {
 
 	@Override
 	public User updateUser(UserDTO userDTO) {
-		User prevUser = this.userRepository.getOne(userDTO.getId());
-		if (prevUser != null) {
+		if (this.userRepository.existsById(userDTO.getId())) {
+			User prevUser = this.userRepository.getOne(userDTO.getId());
 			User user = new UserMapper(this.roleRepository, this.bookRepository).getUser(userDTO);
 			user.setPassword(prevUser.getPassword());
 			return this.userRepository.save(user);
