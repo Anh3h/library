@@ -72,6 +72,19 @@ public class RoleTest {
 	}
 
 	@Test
+	public void testUpdateNonExistingRole() {
+		Role role = RoleFactory.instance();
+		String url = baseUrl + "/" + role.getId();
+		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(role), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+
+	}
+
+	@Test
 	public void testInValidUpdateRole() {
 		Role role = RoleFactory.instance();
 		String roleId = UUID.randomUUID().toString();
