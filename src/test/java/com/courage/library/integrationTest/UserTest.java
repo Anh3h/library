@@ -2,6 +2,7 @@ package com.courage.library.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import javax.xml.ws.Response;
 import java.util.UUID;
 
 import com.courage.library.factory.JsonConverter;
@@ -49,7 +50,7 @@ public class UserTest {
 		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
 	}
 
-	@Test
+	/*@Test
 	public void testCreateUser() {
 		User user = UserFactory.instance();
 
@@ -100,5 +101,20 @@ public class UserTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}*/
+
+	@Test
+	public void testGetUser() {
+		User user = UserFactory.instance();
+		ResponseEntity<String> createUserRes = Helper.createUser(port, user);
+		String userId = JsonPath.parse(createUserRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + userId;
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read("email").toString()).isEqualTo(user.getEmail());
 	}
 }
