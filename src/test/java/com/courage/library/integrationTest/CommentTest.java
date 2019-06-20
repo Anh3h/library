@@ -148,7 +148,7 @@ public class CommentTest {
 		String numberOfElts = JsonPath.parse(response.getBody()).read(".numberOfElements").toString();
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
-		assertThat(new Integer(new Integer(numberOfElts.substring(1, numberOfElts.length()-1))))
+		assertThat(new Integer(numberOfElts.substring(1, numberOfElts.length()-1)))
 				.isGreaterThan(3);
 	}
 

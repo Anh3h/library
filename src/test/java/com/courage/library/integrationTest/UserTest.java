@@ -2,13 +2,10 @@ package com.courage.library.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.xml.ws.Response;
 import java.util.UUID;
 
 import com.courage.library.factory.JsonConverter;
-import com.courage.library.factory.TopicFactory;
 import com.courage.library.factory.UserFactory;
-import com.courage.library.model.Topic;
 import com.courage.library.model.User;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -50,7 +47,7 @@ public class UserTest {
 		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
 	}
 
-	/*@Test
+	@Test
 	public void testCreateUser() {
 		User user = UserFactory.instance();
 
@@ -101,7 +98,7 @@ public class UserTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
-	}*/
+	}
 
 	@Test
 	public void testGetUser() {
@@ -116,5 +113,44 @@ public class UserTest {
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read("email").toString()).isEqualTo(user.getEmail());
+	}
+
+	@Test
+	public void testGetUsers() {
+		UserFactory.instances().forEach(user -> Helper.createUser(port, user));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET, entity,
+				String.class);
+		String numberOfElts = JsonPath.parse(response.getBody()).read(".numberOfElements").toString();
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(new Integer(numberOfElts.substring(1, numberOfElts.length()-1)))
+				.isGreaterThan(3);
+	}
+
+	@Test
+	public void testGetUsersWithValidPageParams() {
+		UserFactory.instances().forEach(user -> Helper.createUser(port, user));
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=1&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read(".size").toString())
+				.isEqualTo("[3]");
+	}
+
+	@Test
+	public void testGetUsersWithInValidPageParams() {
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "?page=-1&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
 	}
 }
