@@ -91,7 +91,7 @@ public class TransactionControllerTest {
 
 	@Test
 	public void getTransactionsRequest_returnsHttp200AndAPageOfTransactions() throws Exception {
-		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstances(UserFactory.instance()));
+		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstancesForAUser(UserFactory.instance()));
 		given(this.transactionQuery.getTransactions(1, 20)).willReturn(transactions);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions")
@@ -102,7 +102,7 @@ public class TransactionControllerTest {
 
 	@Test
 	public void getTransactionsRequestWithValidPageParams_returnsHttp200AndAPageOfTransactions() throws Exception {
-		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstances(UserFactory.instance()));
+		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstancesForAUser(UserFactory.instance()));
 		given(this.transactionQuery.getTransactions(1, 4)).willReturn(transactions);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions?page=1&size=4")

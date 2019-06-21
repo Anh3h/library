@@ -45,7 +45,7 @@ public class TransactionQueryTest {
 
 	@Test
 	public void getTransactions_returnsAPageOfTransactions() {
-		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstances(UserFactory.instance()));
+		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstancesForAUser(UserFactory.instance()));
 		given(this.transactionRepository.findAll(PageRequest.of(0, 2))).willReturn(transactions);
 
 		Page<Transaction> gottenTransactions = this.transactionQuery.getTransactions(1, 2);
@@ -56,7 +56,7 @@ public class TransactionQueryTest {
 	@Test
 	public void getTransactionsByUser_returnsAPageOfTransactionsPerformedByAUser() {
 		User user = UserFactory.instance();
-		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstances(user));
+		Page<Transaction> transactions = new PageImpl<>(TransactionFactory.getInstancesForAUser(user));
 		given(this.transactionRepository.findByUser(user, PageRequest.of(0, 2))).willReturn(transactions);
 		given(this.userRepository.getOne(user.getId())).willReturn(user);
 

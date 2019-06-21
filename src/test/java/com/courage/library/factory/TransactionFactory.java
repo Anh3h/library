@@ -32,11 +32,17 @@ public class TransactionFactory {
 		return new Transaction(id, user, book, checkOut, checkIn, checkOutStatus, checkInStatus);
 	}
 
-	public static List<Transaction> getInstances(User user) {
+	public static List<Transaction> instances() {
 		List<Transaction> transactions = new ArrayList<>();
 		transactions.add(instance());
 		transactions.add(instance());
 		transactions.add(instance());
+
+		return transactions;
+	}
+
+	public static List<Transaction> getInstancesForAUser(User user) {
+		List<Transaction> transactions = TransactionFactory.instances();
 
 		transactions.forEach(transaction -> transaction.setUser(user));
 		return transactions;

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TransactionFactory;
+import com.courage.library.factory.UserFactory;
 import com.courage.library.model.Transaction;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
@@ -94,5 +95,63 @@ public class TransactionTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	public void testGetTransaction() {
+		Transaction transaction = TransactionFactory.instance();
+		ResponseEntity<String> createTransRes = Helper.createTransaction(port, transaction);
+		String transId = JsonPath.parse(createTransRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + transId;
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(null), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, httpEntity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read("user.id").toString())
+				.isEqualTo(transaction.getUser().getId());
+		assertThat(JsonPath.parse(response.getBody()).read("book.id").toString())
+				.isEqualTo(transaction.getBook().getId());
+	}
+
+	@Test
+	public void testGetTransactions() {
+		 TransactionFactory.instances().forEach(trans -> Helper.createTransaction(port, trans));
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(null), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET, httpEntity,
+				String.class);
+		String numberOfElts = JsonPath.parse(response.getBody()).read(".numberOfElements").toString();
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(new Integer(numberOfElts.substring(1, numberOfElts.length()-1)))
+				.isGreaterThan(3);
+	}
+
+	@Test
+	public void testGetTransactionsWithValidPageParams() {
+		TransactionFactory.instances().forEach(trans -> Helper.createTransaction(port, trans));
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(null), httpHeaders);
+		String url = baseUrl + "?page=1&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, httpEntity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read(".size").toString())
+				.isEqualTo("[3]");
+	}
+
+	@Test
+	public void testGetTransactionsWithInValidPageParams() {
+		TransactionFactory.instances().forEach(trans -> Helper.createTransaction(port, trans));
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(null), httpHeaders);
+		String url = baseUrl + "?page=-1&size=3";
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, httpEntity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
 	}
 }

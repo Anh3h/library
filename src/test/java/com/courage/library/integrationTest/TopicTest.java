@@ -110,7 +110,7 @@ public class TopicTest {
 	}
 
 	@Test
-	public void testGetTopicsWithPageParam() {
+	public void testGetTopicsWithValidPageParam() {
 		TopicFactory.instances().forEach(topic -> createTopic(topic));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 		String url = baseUrl + "?page=2&size=3";
