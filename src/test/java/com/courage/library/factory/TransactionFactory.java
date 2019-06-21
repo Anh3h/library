@@ -1,6 +1,7 @@
 package com.courage.library.factory;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,12 @@ public class TransactionFactory {
 		User user = UserFactory.instance();
 		Book book = BookFactory.instance();
 		Date checkOut = new Date();
-		Date checkIn = new Date();
+
+		Calendar c = Calendar.getInstance();
+		c.setTime(checkOut);
+		c.add(Calendar.DATE, 1);
+		Date checkIn = c.getTime();
+
 		Status checkOutStatus = Status.PENDING;
 		Status checkInStatus = Status.PENDING;
 

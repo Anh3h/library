@@ -40,6 +40,6 @@ public class TransactionTest {
 
 		ResponseEntity<String> response = Helper.createTransaction(port, transaction);
 
-		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
 	}
 }

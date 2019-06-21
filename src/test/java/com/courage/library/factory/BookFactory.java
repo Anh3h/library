@@ -18,11 +18,11 @@ public class BookFactory {
 		String title = RandomStringUtils.random(10, true, true);
 		String isbn = RandomStringUtils.random(10, false, true);
 		String author = RandomStringUtils.random(10, true, true);
-		Integer totalQty = new Random().nextInt();
-		Integer availableQty = new Random().nextInt();
-		Integer upVotes = new Random().nextInt();
-		Integer downVotes = new Random().nextInt();
-		Integer numOfBorrows = new Random().nextInt();
+		Integer totalQty = Math.abs(new Random().nextInt());
+		Integer availableQty = Math.abs(new Random().nextInt(totalQty));
+		Integer upVotes = Math.abs(new Random().nextInt());
+		Integer downVotes = Math.abs(new Random().nextInt());
+		Integer numOfBorrows = Math.abs(new Random().nextInt(availableQty));
 		Topic topic = TopicFactory.instance();
 		Book book = new Book(id, title, isbn, author, topic, totalQty, availableQty, upVotes,
 				downVotes, numOfBorrows);
