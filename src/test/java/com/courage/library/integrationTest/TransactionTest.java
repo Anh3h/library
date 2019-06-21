@@ -2,15 +2,19 @@ package com.courage.library.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TransactionFactory;
 import com.courage.library.model.Transaction;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +45,24 @@ public class TransactionTest {
 		ResponseEntity<String> response = Helper.createTransaction(port, transaction);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
+		assertThat(JsonPath.parse(response.getBody()).read("user.id").toString())
+				.isEqualTo(transaction.getUser().getId());
+	}
+
+	@Test
+	public void testUpdateTransaction() {
+		Transaction transaction = TransactionFactory.instance();
+		ResponseEntity<String> createTransRes = Helper.createTransaction(port, transaction);
+		String transId = JsonPath.parse(createTransRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + transId;
+		transaction.setId(transId);
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(transaction), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, httpEntity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read("user.id").toString())
+				.isEqualTo(transaction.getUser().getId());
 	}
 }
