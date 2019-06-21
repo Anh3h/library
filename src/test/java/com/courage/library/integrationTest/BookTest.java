@@ -6,11 +6,8 @@ import java.util.UUID;
 
 import com.courage.library.factory.BookFactory;
 import com.courage.library.factory.JsonConverter;
-import com.courage.library.factory.TopicFactory;
 import com.courage.library.model.Book;
-import com.courage.library.model.Topic;
 import com.courage.library.model.dto.BookDTO;
-import com.google.api.client.json.Json;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;

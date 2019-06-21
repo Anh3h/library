@@ -3,7 +3,6 @@ package com.courage.library.unitTest.service.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

@@ -7,7 +7,6 @@ import static org.mockito.BDDMockito.given;
 import com.courage.library.exception.ConflictException;
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.factory.UserFactory;
-import com.courage.library.mapper.UserMapper;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.UserDTO;
 import com.courage.library.repository.BookRepository;

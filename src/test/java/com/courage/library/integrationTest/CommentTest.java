@@ -9,8 +9,6 @@ import com.courage.library.factory.JsonConverter;
 import com.courage.library.model.Comment;
 import com.courage.library.model.dto.CommentDTO;
 import com.jayway.jsonpath.JsonPath;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.HttpResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

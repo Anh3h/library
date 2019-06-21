@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TransactionFactory;
-import com.courage.library.factory.UserFactory;
 import com.courage.library.model.Transaction;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;

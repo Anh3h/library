@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.courage.library.model.Topic;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.data.domain.Page;
 
 public class TopicFactory {
 

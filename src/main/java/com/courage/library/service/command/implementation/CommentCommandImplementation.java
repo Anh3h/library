@@ -1,14 +1,12 @@
 package com.courage.library.service.command.implementation;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.mapper.CommentMapper;
 import com.courage.library.model.Comment;
 import com.courage.library.model.Notification;
-import com.courage.library.model.User;
 import com.courage.library.model.dto.CommentDTO;
 import com.courage.library.repository.BookRepository;
 import com.courage.library.repository.CommentRepository;

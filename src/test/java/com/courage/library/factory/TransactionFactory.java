@@ -11,7 +11,6 @@ import com.courage.library.model.Status;
 import com.courage.library.model.Transaction;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.TransactionDTO;
-import org.springframework.data.domain.Page;
 
 public class TransactionFactory {
 

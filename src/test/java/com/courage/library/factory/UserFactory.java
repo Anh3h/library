@@ -9,7 +9,6 @@ import com.courage.library.model.Role;
 import com.courage.library.model.User;
 import com.courage.library.model.dto.UserDTO;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.data.domain.Page;
 
 public class UserFactory {
 

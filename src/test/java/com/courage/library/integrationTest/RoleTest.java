@@ -9,7 +9,6 @@ import com.courage.library.factory.RoleFactory;
 import com.courage.library.model.Role;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
