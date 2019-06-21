@@ -2,6 +2,8 @@ package com.courage.library.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.UUID;
+
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.TransactionFactory;
 import com.courage.library.model.Transaction;
@@ -47,6 +49,8 @@ public class TransactionTest {
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
 		assertThat(JsonPath.parse(response.getBody()).read("user.id").toString())
 				.isEqualTo(transaction.getUser().getId());
+		assertThat(JsonPath.parse(response.getBody()).read("book.id").toString())
+				.isEqualTo(transaction.getBook().getId());
 	}
 
 	@Test
@@ -64,5 +68,31 @@ public class TransactionTest {
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read("user.id").toString())
 				.isEqualTo(transaction.getUser().getId());
+		assertThat(JsonPath.parse(response.getBody()).read("book.id").toString())
+				.isEqualTo(transaction.getBook().getId());
+	}
+
+	@Test
+	public void testInvaidUpdateTransaction() {
+		Transaction transaction = TransactionFactory.instance();
+		String url = baseUrl + "/" + UUID.randomUUID().toString();
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(transaction), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, httpEntity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
+	}
+
+	@Test
+	public void testUpdateNonExistingTransaction() {
+		Transaction transaction = TransactionFactory.instance();
+		String url = baseUrl + "/" + transaction.getId();
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(transaction), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, httpEntity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
 	}
 }

@@ -51,8 +51,8 @@ public class TransactionCommandImplementation implements TransactionCommand {
 
 	@Override
 	public Transaction updateTransaction(TransactionDTO transactionDTO) {
-		Transaction prevTransaction = this.transactionRepository.getOne(transactionDTO.getId());
-		if (prevTransaction != null) {
+		if (this.transactionRepository.existsById(transactionDTO.getId())) {
+			Transaction prevTransaction = this.transactionRepository.getOne(transactionDTO.getId());
 			if (transactionDTO.getCheckOut().before(transactionDTO.getCheckIn())) {
 				prevTransaction.setCheckIn(transactionDTO.getCheckIn());
 				prevTransaction.setCheckOut(transactionDTO.getCheckOut());
