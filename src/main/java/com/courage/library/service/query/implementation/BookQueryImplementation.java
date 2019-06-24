@@ -1,5 +1,7 @@
 package com.courage.library.service.query.implementation;
 
+import java.util.Optional;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Book;
 import com.courage.library.model.Topic;
@@ -25,11 +27,11 @@ public class BookQueryImplementation implements BookQuery {
 
 	@Override
 	public Book getBookById(String bookId) {
-		Book book = this.bookRepository.getOne(bookId);
-		if (book == null) {
+		Optional<Book> book = this.bookRepository.findById(bookId);
+		if (!book.isPresent()) {
 			throw NotFoundException.create("Not Found: Book does not exist");
 		}
-		return book;
+		return book.get();
 	}
 
 	@Override

@@ -111,6 +111,18 @@ public class BookTest {
 	}
 
 	@Test
+	public void testGetNonExistingBook() {
+		Book book = BookFactory.instance();
+		String url = baseUrl + "/" + book.getId();
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET,
+				entity, String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
 	public void testGetBooks() {
 		BookFactory.instances().forEach(book -> Helper.createBook(port, book));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
@@ -123,6 +135,8 @@ public class BookTest {
 		assertThat(new Integer(numberOfElts.substring(1, numberOfElts.length()-1)))
 			.isGreaterThan(3);
 	}
+
+	//TODO: Implement integration test /api/v1/books?authors=some-author
 
 	@Test
 	public void testGetBooksWithValidPageParams() {
@@ -148,5 +162,22 @@ public class BookTest {
 				entity, String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
+	}
+
+	@Test
+	public void testDeleteBook() {
+		Book book = BookFactory.instance();
+		ResponseEntity<String> createBookRes = Helper.createBook(port, book);
+		String bookId = JsonPath.parse(createBookRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + bookId;
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.DELETE, entity,
+				String.class);
+		ResponseEntity<String> getBookRes = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NO_CONTENT);
+		assertThat(getBookRes.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
 	}
 }
