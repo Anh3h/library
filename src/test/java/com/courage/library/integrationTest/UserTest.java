@@ -170,4 +170,18 @@ public class UserTest {
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
 	}
+
+	@Test
+	public void testDeleteUser() {
+		User user = UserFactory.instance();
+		ResponseEntity<String> createUserRes = Helper.createUser(port, user);
+		String userId = JsonPath.parse(createUserRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + userId;
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.DELETE, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NO_CONTENT);
+	}
 }
