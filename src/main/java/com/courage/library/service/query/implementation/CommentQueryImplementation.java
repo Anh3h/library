@@ -1,5 +1,7 @@
 package com.courage.library.service.query.implementation;
 
+import java.util.Optional;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Book;
 import com.courage.library.model.Comment;
@@ -24,11 +26,11 @@ public class CommentQueryImplementation implements CommentQuery {
 
 	@Override
 	public Comment getCommentById(String commentId) {
-		Comment comment = this.commentRepository.getOne(commentId);
-		if (comment == null) {
+		Optional<Comment> comment = this.commentRepository.findById(commentId);
+		if (!comment.isPresent()) {
 			throw NotFoundException.create("Not Found: Comment does not exist");
 		}
-		return comment;
+		return comment.get();
 	}
 
 	@Override

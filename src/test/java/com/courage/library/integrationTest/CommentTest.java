@@ -150,6 +150,12 @@ public class CommentTest {
 				.isGreaterThan(3);
 	}
 
+	//TODO: Implement integration test /api/v1/comments?bookId=2
+	/*
+		Blocker Helper.createComment method assumes the books are different (new)
+		but this method needs to create comments that share the same bookId account.
+	*/
+
 	@Test
 	public void testGetCommentsWithValidPageParams() {
 		CommentFactory.instances().forEach(commment -> this.createComment(commment));
@@ -173,5 +179,22 @@ public class CommentTest {
 				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.BAD_REQUEST);
+	}
+
+	@Test
+	public void testDeleteComment() {
+		Comment comment = CommentFactory.instance();
+		ResponseEntity<String> createCommentRes = this.createComment(comment);
+		String commentId = JsonPath.parse(createCommentRes.getBody()).read("id").toString();
+		String url = baseUrl + "/" + commentId;
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.DELETE, entity,
+				String.class);
+		ResponseEntity<String> getCommentRes = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NO_CONTENT);
+		assertThat(getCommentRes.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
 	}
 }
