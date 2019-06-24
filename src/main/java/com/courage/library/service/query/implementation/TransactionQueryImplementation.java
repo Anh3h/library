@@ -1,5 +1,7 @@
 package com.courage.library.service.query.implementation;
 
+import java.util.Optional;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Transaction;
 import com.courage.library.model.User;
@@ -24,11 +26,11 @@ public class TransactionQueryImplementation implements TransactionQuery {
 
 	@Override
 	public Transaction getTransactionById(String id) {
-		Transaction transaction = this.transactionRepository.getOne(id);
-		if (transaction == null) {
+		Optional<Transaction> transaction = this.transactionRepository.findById(id);
+		if (!transaction.isPresent()) {
 			throw NotFoundException.create("Not Found: Transaction does not exist");
 		}
-		return transaction;
+		return transaction.get();
 	}
 
 	@Override

@@ -144,6 +144,18 @@ public class TopicTest {
 	}
 
 	@Test
+	public void testGetNonExistingTopic() {
+		Topic topic = TopicFactory.instance();
+		String url = baseUrl + "/" + topic.getId();
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+	}
+
+	@Test
 	public void testDeleteTopic() {
 		Topic topic = TopicFactory.instance();
 		ResponseEntity<String> createTopicResponse = Helper.createTopic(port, topic);

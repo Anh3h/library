@@ -137,6 +137,18 @@ public class CommentTest {
 	}
 
 	@Test
+	public void testGetNonExistingComment() {
+		Comment comment = CommentFactory.instance();
+		HttpEntity<String> entity = new HttpEntity(null, httpHeaders);
+		String url = baseUrl + "/" + comment.getId();
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
 	public void testGetComments() {
 		CommentFactory.instances().forEach(commment -> this.createComment(commment));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);

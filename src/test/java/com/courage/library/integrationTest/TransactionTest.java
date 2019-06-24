@@ -115,6 +115,18 @@ public class TransactionTest {
 	}
 
 	@Test
+	public void testGetNonExistingTransaction() {
+		Transaction transaction = TransactionFactory.instance();
+		String url = baseUrl + "/" + transaction.getId();
+		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(null), httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, httpEntity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
 	public void testGetTransactions() {
 		 TransactionFactory.instances().forEach(trans -> Helper.createTransaction(port, trans));
 		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(null), httpHeaders);
