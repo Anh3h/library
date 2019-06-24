@@ -41,12 +41,6 @@ public class UserTest {
 		baseUrl += "/api/v1/users";
 	}
 
-	private ResponseEntity<String> createUser(User user) {
-		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(user), httpHeaders);
-
-		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
-	}
-
 	@Test
 	public void testCreateUser() {
 		User user = UserFactory.instance();
@@ -181,7 +175,10 @@ public class UserTest {
 
 		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.DELETE, entity,
 				String.class);
+		ResponseEntity<String> getUserRes = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NO_CONTENT);
+		assertThat(getUserRes.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
 	}
 }

@@ -153,7 +153,10 @@ public class TopicTest {
 
 		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.DELETE, entity,
 				String.class);
+		ResponseEntity<String> getTopicRes = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NO_CONTENT);
+		assertThat(getTopicRes.getStatusCode()).isEqualByComparingTo(HttpStatus.NOT_FOUND);
 	}
 }

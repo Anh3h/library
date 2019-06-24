@@ -1,5 +1,7 @@
 package com.courage.library.service.query.implementation;
 
+import java.util.Optional;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Topic;
 import com.courage.library.repository.TopicRepository;
@@ -19,11 +21,11 @@ public class TopicQueryImplementation implements TopicQuery {
 
 	@Override
 	public Topic getTopicById(String id) {
-		Topic topic = this.topicRepository.getOne(id);
-		if (topic == null) {
+		Optional<Topic> topic = this.topicRepository.findById(id);
+		if (!topic.isPresent()) {
 			throw NotFoundException.create("Not Found: Topic does not exist");
 		}
-		return topic;
+		return topic.get();
 	}
 
 	@Override

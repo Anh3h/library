@@ -1,5 +1,7 @@
 package com.courage.library.service.query.implementation;
 
+import java.util.Optional;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.User;
 import com.courage.library.repository.UserRepository;
@@ -19,11 +21,11 @@ public class UserQueryImplementation implements UserQuery {
 
 	@Override
 	public User getUserById(String id) {
-		User user = this.userRepository.getOne(id);
-		if (user == null) {
+		Optional<User> user = this.userRepository.findById(id);
+		if (!user.isPresent()) {
 			throw NotFoundException.create("Not Found: User does not exist");
 		}
-		return user;
+		return user.get();
 	}
 
 	@Override
