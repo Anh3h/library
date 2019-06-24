@@ -73,7 +73,7 @@ public class TransactionTest {
 	}
 
 	@Test
-	public void testInvaidUpdateTransaction() {
+	public void testInvalidUpdateTransaction() {
 		Transaction transaction = TransactionFactory.instance();
 		String url = baseUrl + "/" + UUID.randomUUID().toString();
 		HttpEntity httpEntity = new HttpEntity(JsonConverter.toJSON(transaction), httpHeaders);
@@ -127,6 +127,12 @@ public class TransactionTest {
 		assertThat(new Integer(numberOfElts.substring(1, numberOfElts.length()-1)))
 				.isGreaterThan(3);
 	}
+
+	//TODO: Implement integration test /api/v1/transactions?userId=2
+	/*
+		Blocker Helper.createTransaction method assumes the users are different (new)
+		but this method needs to create transactions that share the same user account.
+	*/
 
 	@Test
 	public void testGetTransactionsWithValidPageParams() {

@@ -40,17 +40,11 @@ public class TopicTest {
 		baseUrl += "/api/v1/topics";
 	}
 
-	private ResponseEntity<String> createTopic(Topic topic) {
-		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(topic), httpHeaders);
-
-		return this.restTemplate.exchange(baseUrl, HttpMethod.POST, entity, String.class);
-	}
-
 	@Test
 	public void testCreateTopic() {
 		Topic topic = TopicFactory.instance();
 
-		ResponseEntity<String> response = this.createTopic(topic);
+		ResponseEntity<String> response = Helper.createTopic(port, topic);
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
 		assertThat(JsonPath.parse(response.getBody()).read("name").toString()).isEqualTo(topic.getName());
@@ -59,7 +53,7 @@ public class TopicTest {
 	@Test
 	public void testUpdateTopic() {
 		Topic topic = TopicFactory.instance();
-		ResponseEntity<String> createTopicResponse = this.createTopic(topic);
+		ResponseEntity<String> createTopicResponse = Helper.createTopic(port, topic);
 		topic.setId(JsonPath.parse(createTopicResponse.getBody()).read("id").toString());
 		String url = baseUrl + "/" + topic.getId();
 		HttpEntity entity = new HttpEntity(JsonConverter.toJSON(topic), httpHeaders);
@@ -97,7 +91,7 @@ public class TopicTest {
 
 	@Test
 	public void testGetTopics() {
-		TopicFactory.instances().forEach(topic -> createTopic(topic));
+		TopicFactory.instances().forEach(topic -> Helper.createTopic(port, topic));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 
 		ResponseEntity<String> response = this.restTemplate.exchange(baseUrl, HttpMethod.GET, entity,
@@ -111,7 +105,7 @@ public class TopicTest {
 
 	@Test
 	public void testGetTopicsWithValidPageParam() {
-		TopicFactory.instances().forEach(topic -> createTopic(topic));
+		TopicFactory.instances().forEach(topic -> Helper.createTopic(port, topic));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
 		String url = baseUrl + "?page=2&size=3";
 
@@ -137,7 +131,7 @@ public class TopicTest {
 	@Test
 	public void testGetTopic() {
 		Topic topic = TopicFactory.instance();
-		ResponseEntity<String> createTopicResponse = this.createTopic(topic);
+		ResponseEntity<String> createTopicResponse = Helper.createTopic(port, topic);
 		String topicId = JsonPath.parse(createTopicResponse.getBody()).read("id").toString();
 		String url = baseUrl + "/" + topicId;
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
@@ -147,5 +141,19 @@ public class TopicTest {
 
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 		assertThat(JsonPath.parse(response.getBody()).read("name").toString()).isEqualTo(topic.getName());
+	}
+
+	@Test
+	public void testDeleteTopic() {
+		Topic topic = TopicFactory.instance();
+		ResponseEntity<String> createTopicResponse = Helper.createTopic(port, topic);
+		String topicId = JsonPath.parse(createTopicResponse.getBody()).read("id").toString();
+		String url = baseUrl + "/" + topicId;
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.DELETE, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.NO_CONTENT);
 	}
 }
