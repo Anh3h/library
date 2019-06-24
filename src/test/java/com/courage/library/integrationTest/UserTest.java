@@ -116,6 +116,23 @@ public class UserTest {
 	}
 
 	@Test
+	public void testGetUserByEmail() {
+		User user = UserFactory.instance();
+		ResponseEntity<String> createUserRes = Helper.createUser(port, user);
+		String userId = JsonPath.parse(createUserRes.getBody()).read("id").toString();
+		user.setId(userId);
+		String url = baseUrl + "/email/" + user.getEmail();
+		HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+		ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.GET, entity,
+				String.class);
+
+		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+		assertThat(JsonPath.parse(response.getBody()).read("email").toString())
+			.isEqualTo(user.getEmail());
+	}
+
+	@Test
 	public void testGetUsers() {
 		UserFactory.instances().forEach(user -> Helper.createUser(port, user));
 		HttpEntity entity = new HttpEntity(null, httpHeaders);
