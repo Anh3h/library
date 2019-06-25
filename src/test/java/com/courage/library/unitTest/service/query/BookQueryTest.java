@@ -3,6 +3,8 @@ package com.courage.library.unitTest.service.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Optional;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.factory.BookFactory;
 import com.courage.library.model.Book;
@@ -104,7 +106,7 @@ public class BookQueryTest {
 	@Test
 	public void getBook_returnsExistingBook() {
 		Book book = BookFactory.instance();
-		given(this.bookRepository.getOne(book.getId())).willReturn(book);
+		given(this.bookRepository.findById(book.getId())).willReturn(Optional.of(book));
 
 		Book gottenBook = this.bookQuery.getBookById(book.getId());
 
@@ -114,7 +116,7 @@ public class BookQueryTest {
 	@Test(expected = NotFoundException.class)
 	public void getNonExistingBook_throwsNotFoundException() {
 		String bookId = BookFactory.instance().getId();
-		given(this.bookRepository.getOne(bookId)).willReturn(null);
+		given(this.bookRepository.findById(bookId)).willReturn(Optional.empty());
 
 		this.bookQuery.getBookById(bookId);
 	}

@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.factory.BookFactory;
@@ -80,7 +81,7 @@ public class CommentQueryTest {
 	@Test
 	public void getComments_returnsAnExistingComments() {
 		Comment comment = CommentFactory.instance();
-		given(this.commentRepository.getOne(comment.getId())).willReturn(comment);
+		given(this.commentRepository.findById(comment.getId())).willReturn(Optional.of(comment));
 
 		Comment gottenComment = this.commentQuery.getCommentById(comment.getId());
 
@@ -90,7 +91,7 @@ public class CommentQueryTest {
 	@Test(expected = NotFoundException.class)
 	public void getNonExistingComments_throwsNotFoundException() {
 		String commentId = CommentFactory.instance().getId();
-		given(this.commentRepository.getOne(commentId)).willReturn(null);
+		given(this.commentRepository.findById(commentId)).willReturn(Optional.empty());
 
 		this.commentQuery.getCommentById(commentId);
 	}

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.courage.library.exception.NotFoundException;
@@ -50,7 +51,7 @@ public class RoleQueryTest {
 	@Test
 	public void getRole_returnsExistingRole() {
 		Role role = RoleFactory.instance();
-		given(this.roleRepository.getOne(role.getId())).willReturn(role);
+		given(this.roleRepository.findById(role.getId())).willReturn(Optional.of(role));
 
 		Role gottenRole = this.roleQuery.getRoleById(role.getId());
 
@@ -60,7 +61,7 @@ public class RoleQueryTest {
 	@Test(expected = NotFoundException.class)
 	public void getRoleNonExistingRole_throwsNotFoundException() {
 		String roleId = UUID.randomUUID().toString();
-		given(this.roleRepository.getOne(roleId)).willReturn(null);
+		given(this.roleRepository.findById(roleId)).willReturn(Optional.empty());
 
 		Role gottenRole = this.roleQuery.getRoleById(roleId);
 

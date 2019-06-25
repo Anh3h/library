@@ -3,6 +3,7 @@ package com.courage.library.unitTest.service.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.courage.library.exception.NotFoundException;
@@ -53,7 +54,7 @@ public class TopicQueryTest {
 	@Test
 	public void getTopic_returnsAnExistingTopic() {
 		Topic topic = TopicFactory.instance();
-		given(this.topicRepository.getOne(topic.getId())).willReturn(topic);
+		given(this.topicRepository.findById(topic.getId())).willReturn(Optional.of(topic));
 
 		Topic gottenTopic = this.topicQuery.getTopicById(topic.getId());
 
@@ -63,7 +64,7 @@ public class TopicQueryTest {
 	@Test(expected = NotFoundException.class)
 	public void getNonExistingTopic_throwsNotFoundException() {
 		String topicId = UUID.randomUUID().toString();
-		given(this.topicRepository.getOne(topicId)).willReturn(null);
+		given(this.topicRepository.findById(topicId)).willReturn(Optional.empty());
 
 		this.topicQuery.getTopicById(topicId);
 	}

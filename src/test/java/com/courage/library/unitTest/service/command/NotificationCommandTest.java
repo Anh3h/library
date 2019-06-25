@@ -69,7 +69,7 @@ public class NotificationCommandTest {
 		Notification notification = NotificationFactory.instance();
 		given(this.notificationRepository.findById(notification.getId())).willReturn(Optional.empty());
 
-		Notification updatedNotification = this.notificationCommand.updateNotification(notification.getId());
+		this.notificationCommand.updateNotification(notification.getId());
 	}
 
 }

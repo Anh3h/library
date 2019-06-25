@@ -3,6 +3,8 @@ package com.courage.library.unitTest.service.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Optional;
+
 import com.courage.library.exception.NotFoundException;
 import com.courage.library.factory.TransactionFactory;
 import com.courage.library.factory.UserFactory;
@@ -68,7 +70,7 @@ public class TransactionQueryTest {
 	@Test
 	public void getTransaction_returnsExistingTransaction() {
 		Transaction transaction = TransactionFactory.instance();
-		given(this.transactionRepository.getOne(transaction.getId())).willReturn(transaction);
+		given(this.transactionRepository.findById(transaction.getId())).willReturn(Optional.of(transaction));
 
 		Transaction gottenTransaction = this.transactionQuery.getTransactionById(transaction.getId());
 
@@ -78,7 +80,7 @@ public class TransactionQueryTest {
 	@Test(expected = NotFoundException.class)
 	public void getNonExistingTransaction_throwsNotFoundException() {
 		String transactionId = TransactionFactory.instance().getId();
-		given(this.transactionRepository.getOne(transactionId)).willReturn(null);
+		given(this.transactionRepository.findById(transactionId)).willReturn(Optional.empty());
 
 		this.transactionQuery.getTransactionById(transactionId);
 	}

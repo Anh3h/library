@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.courage.library.exception.NotFoundException;
@@ -57,7 +58,7 @@ public class UserQueryTest {
 	@Test
 	public void getUser_returnsExistingUser() {
 		User user = UserFactory.instance();
-		given(this.userRepository.getOne(user.getId())).willReturn(user);
+		given(this.userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
 		User gottenUser = this.userQuery.getUserById(user.getId());
 
@@ -67,7 +68,7 @@ public class UserQueryTest {
 	@Test(expected = NotFoundException.class)
 	public void getNonExistingUser_throwsNotFoundException() {
 		String userId = UUID.randomUUID().toString();
-		given(this.userRepository.getOne(userId)).willReturn(null);
+		given(this.userRepository.findById(userId)).willReturn(Optional.empty());
 
 		this.userQuery.getUserById(userId);
 	}
