@@ -1,14 +1,18 @@
 package com.courage.library.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.courage.library.exception.BadRequestException;
 import com.courage.library.model.Notification;
+import com.courage.library.model.User;
 import com.courage.library.model.dto.PasswordDTO;
 import com.courage.library.service.command.AccountCommand;
 import com.courage.library.service.command.NotificationCommand;
 import com.courage.library.service.query.NotificationQuery;
+import com.courage.library.service.query.UserQuery;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +34,9 @@ public class AccountController {
 
 	@Autowired
 	private AccountCommand accountCommand;
+
+	@Autowired
+	private UserQuery userQuery;
 
 	@Autowired
 	private NotificationQuery notificationQuery;
@@ -59,16 +66,29 @@ public class AccountController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	//TODO get current account details
 	@ApiOperation("Get logged-in user's notification")
 	@GetMapping(
-			value = "/users/{userId}/notifications",
+			value = "/me",
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Page<Notification>> getNotifications(@PathVariable("userId") String userId, @RequestParam( value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "done", required = false) Boolean done) {
+	public ResponseEntity<User> getLoggedInUser(Principal principal) {
+		User user = this.getActiveUser(principal.getName());
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
+	@ApiOperation("Get logged-in user's notification")
+	@GetMapping(
+			value = "/notifications",
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<Page<Notification>> getNotifications( @RequestParam( value = "page", required = false) Integer page,
+			@RequestParam(value = "size", required = false) Integer size,
+			@RequestParam(value = "done", required = false) Boolean done, Principal principal ) {
 		Map<String, Integer> pageAttributes = PageValidator.validatePageAndSize(page, size);
 		page = pageAttributes.get("page");
 		size = pageAttributes.get("size");
+		String userId = this.getActiveUser(principal.getName()).getId();
 		if (done != null && done == false) {
 			Page<Notification> notifications = this.notificationQuery.getUndoneNotifications(userId, page, size);
 			return new ResponseEntity<>(notifications, HttpStatus.OK);
@@ -79,15 +99,34 @@ public class AccountController {
 
 	@ApiOperation("Update logged-in user's notification")
 	@PutMapping(
-			value = "notifications/{notificationId}",
+			value = "/notifications/{notificationId}",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<Notification> updateNotifications(@RequestBody Notification notification, @PathVariable("notificationId") String notificationId) {
-		if (notification.getId().compareTo(notificationId) == 0) {
-			Notification updatedNotification = this.notificationCommand.updateNotification(notification);
-			return new ResponseEntity<>(updatedNotification, HttpStatus.OK);
+	public ResponseEntity<Notification> updateNotifications(@PathVariable("notificationId") String notificationId) {
+		Notification updatedNotification = this.notificationCommand.updateNotification(notificationId);
+		return new ResponseEntity<>(updatedNotification, HttpStatus.OK);
+	}
+
+	private User getActiveUser(String username) {
+		User user;
+		if( this.isEmail(username) ) {
+			user = this.userQuery.getUserByEmail(username);
+		} else {
+			user = this.userQuery.getUserByUsername(username);
 		}
-		throw BadRequestException.create("Bad Request: Notification id in path parameter does not match that in notification object");
+		return user;
+	}
+
+	Boolean isEmail( String text ){
+		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+				"[a-zA-Z0-9_+&*-]+)*@" +
+				"(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+				"A-Z]{2,7}$";
+
+		Pattern pat = Pattern.compile(emailRegex);
+		if (text == null)
+			return false;
+		return pat.matcher(text).matches();
 	}
 }

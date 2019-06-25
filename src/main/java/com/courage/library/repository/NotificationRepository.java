@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, String> {
 
 	Page<Notification> findByUser(User user, Pageable page);
 	Page<Notification> findByUserAndDone(User user, Boolean done, Pageable page);

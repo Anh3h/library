@@ -7,5 +7,6 @@ public interface UserQuery {
 
 	User getUserById(String id);
 	User getUserByEmail(String email);
+	User getUserByUsername(String username);
 	Page<User> getUsers(Integer pageNumber, Integer pageSize);
 }

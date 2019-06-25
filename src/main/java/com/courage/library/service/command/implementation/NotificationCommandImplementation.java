@@ -1,7 +1,9 @@
 package com.courage.library.service.command.implementation;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import com.courage.library.exception.NotFoundException;
 import com.courage.library.model.Notification;
 import com.courage.library.repository.NotificationRepository;
 import com.courage.library.service.command.NotificationCommand;
@@ -23,7 +25,12 @@ public class NotificationCommandImplementation implements NotificationCommand {
 	}
 
 	@Override
-	public Notification updateNotification(Notification notification) {
-		return notificationRepository.save(notification);
+	public Notification updateNotification(String notificationId) {
+		Optional<Notification> notification = this.notificationRepository.findById(notificationId);
+		if(notification.isPresent()) {
+			notification.get().setDone(true);
+			return notificationRepository.save(notification.get());
+		}
+		throw NotFoundException.create("Not Found; Notification does not exist");
 	}
 }
