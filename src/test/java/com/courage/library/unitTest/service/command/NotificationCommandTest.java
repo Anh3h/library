@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.Optional;
 
+import com.courage.library.exception.NotFoundException;
 import com.courage.library.factory.NotificationFactory;
 import com.courage.library.model.Notification;
 import com.courage.library.repository.NotificationRepository;
@@ -61,6 +62,14 @@ public class NotificationCommandTest {
 
 		assertThat(updatedNotification.getId()).isEqualTo(notification.getId());
 		assertThat(updatedNotification.getDone()).isTrue();
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void updateNonExistingNotification_throwsNotFoundExceptio() {
+		Notification notification = NotificationFactory.instance();
+		given(this.notificationRepository.findById(notification.getId())).willReturn(Optional.empty());
+
+		Notification updatedNotification = this.notificationCommand.updateNotification(notification.getId());
 	}
 
 }
