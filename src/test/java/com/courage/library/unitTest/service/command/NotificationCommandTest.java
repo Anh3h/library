@@ -1,7 +1,10 @@
 package com.courage.library.unitTest.service.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+
+import java.util.Optional;
 
 import com.courage.library.factory.NotificationFactory;
 import com.courage.library.model.Notification;
@@ -42,6 +45,22 @@ public class NotificationCommandTest {
 				.createNotification(notification);
 
 		assertThat(createdNotification).isEqualToComparingFieldByField(notification);
+	}
+
+	@Test
+	public void updateNotification_returnUpdateNotification() {
+		Notification notification = NotificationFactory.instance();
+		given(this.notificationRepository.findById(notification.getId()))
+				.willReturn(Optional.of(notification));
+		notification.setDone(true);
+		given(this.notificationRepository.save(any(Notification.class)))
+				.willReturn(notification);
+		notification.setDone(false);
+
+		Notification updatedNotification = this.notificationCommand.updateNotification(notification.getId());
+
+		assertThat(updatedNotification.getId()).isEqualTo(notification.getId());
+		assertThat(updatedNotification.getDone()).isTrue();
 	}
 
 }

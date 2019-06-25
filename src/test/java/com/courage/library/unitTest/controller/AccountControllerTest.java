@@ -14,6 +14,7 @@ import com.courage.library.model.Notification;
 import com.courage.library.service.command.AccountCommand;
 import com.courage.library.service.command.NotificationCommand;
 import com.courage.library.service.query.NotificationQuery;
+import com.courage.library.service.query.UserQuery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class AccountControllerTest {
 
 	@MockBean
 	private AccountCommand accountCommand;
+
+	@MockBean
+	private UserQuery userQuery;
 
 	@MockBean
 	private NotificationCommand notificationCommand;
@@ -92,12 +96,10 @@ public class AccountControllerTest {
 	@Test
 	public void updateUserRequest_returnsHttp200AndAnUpdatedNotification() throws Exception {
 		Notification notification = NotificationFactory.instance();
-		given(this.notificationCommand.updateNotification(any(Notification.class))).willReturn(notification);
+		given(this.notificationCommand.updateNotification(notification.getId())).willReturn(notification);
 
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/notifications/" + notification.getId())
-				.accept(MediaType.APPLICATION_JSON_VALUE)
-				.contentType(MediaType.APPLICATION_JSON_VALUE)
-				.content(JsonConverter.toJSON(notification)))
+				.accept(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("id").value(notification.getId()));
 	}
