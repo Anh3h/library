@@ -4,14 +4,19 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		jcenter()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath(
+				"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
+				"org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.4"
+		)
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'org.unbroken-dome.test-sets'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
@@ -41,3 +46,11 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 }
+
+testSets {
+	integrationTest { dirName = 'integration-test' }
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+

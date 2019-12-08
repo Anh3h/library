@@ -9,6 +9,9 @@ Back-end server for an e-library management application
 - Kubernetes (Optional)
 
 ## Development environement
+- Configure GOOGLE_APPLICATION_CREDENTIALS to point to json 
+permission service file that has access to the desired bucket.  
+    `export GOOGLE_APPLICATION_CREDENTIALS="/path/to/file"`
 - Initialize the MySQL database with the library.sql file by running
 	`mysql -uroot -pmysql -h172.16.238.2 < "library.sql"`
 Run `./gradlew bootRun` to run the system on a developement environement.
@@ -21,10 +24,11 @@ Run `./gradlew bootRun` to run the system on a developement environement.
 This script starts MySQL, the server and the User Interfaces using docker swarm
 
 ### Using Kubernetes
-	> Run `kubectl apply -f <file>` Subtitude file for the file name.
+	 Run `kubectl apply -f <file>` Subtitude file for the file name.
 - Run the mysql.yml file to start MySQL
 - Run `kubectl get services` to get the ip address of the MySQL host. Then initialize the database by running
-	> `mysql -uroot -pmysql -h<mysql host IP> < "library.sql"`
+	 
+	 `mysql -uroot -pmysql -h<mysql host IP> < "library.sql"`
 
 - Update the library-server.yml with the new MySQL ip address, then run the library-server.yml file.
 - Run `kubectl get services` to get the ip address of the server.

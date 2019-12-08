@@ -60,6 +60,8 @@ public class CommentCommandTest {
 		Comment comment = CommentFactory.instance();
 		CommentDTO commentDTO = CommentFactory.convertToDTO(comment);
 		given(this.commentRepository.save(any(Comment.class))).willReturn(comment);
+		given(this.userRepository.getOne(comment.getUser().getId())).willReturn(comment.getUser());
+		given(this.bookRepository.getOne(comment.getBook().getId())).willReturn(comment.getBook());
 
 		Comment createdComment = this.commentCommand.createComment(commentDTO);
 
@@ -67,6 +69,8 @@ public class CommentCommandTest {
 
 	}
 
+	//This test is suppose to fail but for some reason it passes. I need to figure out
+	//How to test  what goes into my JPA repository. Same thing does for all my create and update test.
 	@Test
 	public void createCommentForFavoriteBook_returnsCreatedComment() {
 		Comment comment = CommentFactory.instance();

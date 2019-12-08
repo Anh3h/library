@@ -16,9 +16,11 @@ import com.courage.library.repository.NotificationRepository;
 import com.courage.library.repository.TopicRepository;
 import com.courage.library.service.command.BookCommand;
 import com.courage.library.service.command.implementation.BookCommandImplementation;
+import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,7 +34,7 @@ public class BookCommandTest {
 	static class BookCommandTestConfiguration {
 		@Bean
 		public BookCommand bookCommand() {
-			return new BookCommandImplementation();
+			return new BookCommandImplementation(Mockito.mock(Bucket.class));
 		}
 	}
 
@@ -44,9 +46,6 @@ public class BookCommandTest {
 
 	@MockBean
 	private NotificationRepository notificationRepository;
-
-	@MockBean
-	private Storage storage;
 
 	@Autowired
 	private BookCommand bookCommand;

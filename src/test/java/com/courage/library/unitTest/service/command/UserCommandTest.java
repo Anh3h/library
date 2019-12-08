@@ -84,6 +84,7 @@ public class UserCommandTest {
 				user.getDob(), user.getTelephone(), user.getRole().getId());
 		given(this.userRepository.getOne(user.getId())).willReturn(user);
 		given(this.userRepository.save(any(User.class))).willReturn(user);
+		given(this.userRepository.existsById(user.getId())).willReturn(true);
 
 		User updatedUser = this.userCommand.updateUser(userDTO);
 
