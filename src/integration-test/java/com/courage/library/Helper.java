@@ -26,8 +26,10 @@ public class Helper {
 	private static HttpHeaders httpHeaders = new HttpHeaders();
 
 	private static void setHttpHeaders(String url) {
-		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-		httpHeaders.set("Authorization", "Bearer " + Authenticate.getAccessToken(url));
+		if (httpHeaders.getContentType() == null) {
+			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+			httpHeaders.set("Authorization", "Bearer " + Authenticate.getAccessToken(url));
+		}
 	}
 
 	public static String configUrl(Integer port, String resource) {

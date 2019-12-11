@@ -2,11 +2,18 @@ package com.courage.library;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 
 import com.courage.library.factory.JsonConverter;
 import com.courage.library.factory.RoleFactory;
 import com.courage.library.model.Role;
+import com.google.auth.Credentials;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
@@ -34,7 +41,7 @@ public class RoleTest {
 	private HttpHeaders httpHeaders = new HttpHeaders();
 
 	@Before
-	public void setup() {
+	public void setup() throws IOException {
 		baseUrl += port;
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		httpHeaders.set("Authorization", "Bearer " + Authenticate.getAccessToken(baseUrl));

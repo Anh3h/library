@@ -17,14 +17,16 @@ public class Authenticate {
 	private static HttpHeaders headers = new HttpHeaders();
 
 	public static String getAccessToken(String baseUrl) {
+		if (headers.getContentType() == null) {
+			headers.add("Authorization", "Basic YWRtaW46cGFzc3dvcmQ=");
+			headers.setContentType(MediaType.APPLICATION_JSON);
+		}
 		String url = baseUrl + "/oauth/token?grant_type={password}&username={username}&password={password}";
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.add("Authorization", "Basic YWRtaW46cGFzc3dvcmQ=");
 		HttpEntity httpEntity = new HttpEntity<>(null, headers);
 		Map<String, String> params = getRequestParam();
 
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity,
-				String.class, params) ;
+				String.class, params);
 
 		return JsonPath.parse(response.getBody()).read("access_token").toString();
 	}
