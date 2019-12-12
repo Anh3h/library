@@ -1,73 +1,57 @@
-version: "3"
+version: "3.7"
 services:
-  # mariadb:
-  #   image: mariadb
-  #   container_name: mariadb
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=mysql
-  #   healthcheck:
-  #     test: mysql --user=root --password=mysql -h 172.16.238.4
-  #     interval: 5s
-  #     retries: 20
-  #   networks:
-  #     library_net:
-  #       ipv4_address: 172.16.238.2
-  #   volumes:
-  #         - mysql-volume:/var/lib/mysql
-  library-ms:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - database_ip=172.16.238.2
-    container_name: library-ms
-    image: docker.io/anh3h/library-server:latest
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://172.16.238.2:3306/library?autoReconnect=true&useSSL=false
-    ports:
-      - 8080:8080
-    networks:
-      net:
-        ipv4_address: 172.16.238.3
-    healthcheck:
-      test: curl -f -s http://localhost:8080 || exit 1
-      interval: 1m30s
-      timeout: 30s
-      retries: 3
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-  library-web-app:
-    image: docker.io/anh3h/library-app:latest
-    container_name: library-web-app
-    ports:
-      - 8000:80
-    networks:
-      net:
-        ipv4_address: 172.16.238.4
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-  library-admin-panel:
-    image: docker.io/anh3h/library-admin-app
-    container_name: library-admin-panel
-    ports:
-      - 8001:80
-    networks:
-      net:
-        ipv4_address: 172.16.238.5
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
 
-# volumes:
-#   mysql-volume:
+   mysql:
+     image: mysql:5.6
+     ports:
+       - "3306:3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: mysql
+       MYSQL_DATABASE: library
+     networks:
+       default:
+         ipv4_address: 172.16.238.2
+     volumes:
+           - mysql-volume:/var/lib/mysql
+
+   library-ms:
+       build:
+         context: .
+         dockerfile: Dockerfile
+       depends_on:
+         - mysql
+       image: docker.io/anh3h/library-server:latest
+       environment:
+         SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/library?autoReconnect=true&useSSL=false
+         GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/gcloud
+       secrets:
+         - gcloud
+       ports:
+         - 8080:8080
+       networks:
+         default:
+           ipv4_address: 172.16.238.3
+#       healthcheck:
+#         test: curl -f -s http://localhost:8080 || exit 1
+#         interval: 1m30s
+#         timeout: 30s
+#         retries: 3
+       deploy:
+         replicas: 1
+         restart_policy:
+           condition: on-failure
+
+secrets:
+  gcloud:
+    file: ./key.json
+
+volumes:
+   mysql-volume:
 
 networks:
-  net:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.16.238.0/24"
 
