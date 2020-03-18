@@ -3,4 +3,4 @@ jdk: openjdk8
 services: mysql
 before_install:
   - sudo mysql -e "CREATE DATABASE library;"
-  - echo "UPDATE mysql.user SET password=PASSWORD('mysql') WHERE user='root';\nFLUSH PRIVILEGES;" | mysql -u root
+  - echo "UPDATE mysql.user SET authentication_string=PASSWORD('mysql') WHERE user='root';\nFLUSH PRIVILEGES;" | mysql -u root
