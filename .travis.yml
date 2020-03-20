@@ -2,5 +2,10 @@ language: java
 jdk: openjdk8
 services: mysql
 before_install:
-  - sudo mysql -e "CREATE DATABASE library;"
-  - echo "UPDATE mysql.user SET authentication_string=PASSWORD('mysql') WHERE user='root';\nFLUSH PRIVILEGES;" | mysql -u root
+- openssl aes-256-cbc -K $encrypted_45011fc08f84_key -iv $encrypted_45011fc08f84_iv
+  -in key.json.enc -out key.json -d
+- sudo mysql -e "CREATE DATABASE library;"
+- echo "UPDATE mysql.user SET authentication_string=PASSWORD('mysql') WHERE user='root';\nFLUSH
+  PRIVILEGES;" | mysql -u root
+env: GOOGLE_APPLICATION_CREDENTIALS=key.json
+script: ./gradlew clean build
