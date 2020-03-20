@@ -8,4 +8,4 @@ before_install:
 - echo "UPDATE mysql.user SET authentication_string=PASSWORD('mysql') WHERE user='root';\nFLUSH
   PRIVILEGES;" | mysql -u root
 env: GOOGLE_APPLICATION_CREDENTIALS=key.json
-script: ./gradlew clean build
+script: "./gradlew clean build"
